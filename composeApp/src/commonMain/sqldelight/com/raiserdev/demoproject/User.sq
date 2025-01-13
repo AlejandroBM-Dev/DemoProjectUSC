@@ -1,0 +1,39 @@
+CREATE TABLE usuarios (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    email TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
+    nickname TEXT,
+    numero_telefonico TEXT,
+    fecha_creacion TEXT DEFAULT CURRENT_TIMESTAMP,
+    fecha_actualizacion TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+getUsuarios:
+SELECT * FROM usuarios;
+
+getUsuarioById:
+SELECT * FROM usuarios
+WHERE id = ?;
+
+insertUsuario:
+INSERT OR REPLACE INTO usuarios(
+    id, username, email, password, nickname, numero_telefonico, fecha_creacion, fecha_actualizacion
+) VALUES (
+    ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+);
+
+deleteUsuario:
+DELETE FROM usuarios
+WHERE id = ?;
+
+updateUsuario:
+UPDATE usuarios
+SET 
+    username = :username,
+    email = :email,
+    password = :password,
+    nickname = :nickname,
+    numero_telefonico = :numero_telefonico,
+    fecha_actualizacion = CURRENT_TIMESTAMP
+WHERE id = :id;
