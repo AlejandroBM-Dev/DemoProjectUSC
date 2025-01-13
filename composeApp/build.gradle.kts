@@ -58,11 +58,11 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-            implementation("app.cash.sqldelight:android-driver:2.0.2")
+            implementation(libs.android.driver)
         }
 
         iosMain.dependencies {
-            implementation("app.cash.sqldelight:native-driver:2.0.2")
+            implementation(libs.native.driver)
         }
 
         commonMain.dependencies {
@@ -76,8 +76,10 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
 
+            implementation(libs.kotlinx.coroutines.core)
+
             // DB sqldelight
-            implementation("app.cash.sqldelight:coroutines-extensions:2.0.2")
+            implementation(libs.coroutines.extensions)
 
         }
 
@@ -91,7 +93,7 @@ kotlin {
             implementation(libs.androidx.collection)
 
             // DB sqldelight
-            implementation("app.cash.sqldelight:sqlite-driver:2.0.2")
+            implementation(libs.sqlite.driver)
         }
     }
 }

@@ -22,6 +22,7 @@ import demoprojectusc.composeapp.generated.resources.compose_multiplatform
 fun App(sqlDriver: SqlDriver, isTopBarVisible: Boolean) {
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
+
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             Button(onClick = { showContent = !showContent }) {
                 Text("Click me!")
@@ -34,5 +35,6 @@ fun App(sqlDriver: SqlDriver, isTopBarVisible: Boolean) {
                 }
             }
         }
+
     }
 }

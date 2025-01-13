@@ -8,7 +8,7 @@ import java.io.File
 actual class DriverFactory {
 
     actual fun createDriver(): SqlDriver {
-        val driver = JdbcSqliteDriver(url = "jdbc:sqlite:TaskDatabase.db")
+        val driver = JdbcSqliteDriver(url = "jdbc:sqlite:ProjectDatabase.db")
         if (!File("ProjectDatabase.db").exists()) {
             ProjectDatabase.Schema.create(driver)
         }
