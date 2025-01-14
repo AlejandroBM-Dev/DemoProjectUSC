@@ -10,6 +10,6 @@ class MainApplication: Application() {
         initKoin {
             androidContext(this@MainApplication)
         }
-
+        AndroidContextHolder.appContext = this@MainApplication
     }
 }

@@ -1,0 +1,42 @@
+package com.raiserdev.demoproject.navigation.flows
+
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.composable
+import com.raiserdev.demoproject.navigation.data.Screen
+import com.raiserdev.demoproject.ui.presentation.login.HelpScreen
+import com.raiserdev.demoproject.ui.presentation.login.LoginScreen
+import com.raiserdev.demoproject.ui.presentation.login.RegisterScreen
+
+
+fun NavGraphBuilder.loginNavGraph(
+    navController: NavHostController,
+    onLoginSuccess: () -> Unit // Callback para pasar al siguiente flujo
+) {
+    composable(Screen.Login.route) {
+        LoginScreen(
+            onLoginSuccess = onLoginSuccess,
+            onRegisterClick = {
+                navController.navigate(Screen.Register.route)
+            },
+            onHelpClick = {
+                navController.navigate(Screen.Help.route)
+            }
+        )
+    }
+    composable(Screen.Register.route) {
+        RegisterScreen(
+            onRegisterSuccess = onLoginSuccess,
+            onHelpClick = {
+                navController.navigate(Screen.Help.route)
+            }
+        )
+    }
+    composable(Screen.Help.route) {
+        HelpScreen(
+            onBack = {
+                navController.popBackStack()
+            }
+        )
+    }
+}

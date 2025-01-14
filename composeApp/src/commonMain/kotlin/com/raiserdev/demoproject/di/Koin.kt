@@ -12,10 +12,6 @@ import org.koin.mp.KoinPlatform
 @ComponentScan("com.raiserdev.demoproject.data")
 class DataModule
 
-@Module
-@ComponentScan("com.raiserdev.demoproject.ui.presentation")
-class ViewModelModule
-
 @Module(includes = [DataModule::class,ViewModelModule::class, NativeModule::class])
 class AppModule
 
