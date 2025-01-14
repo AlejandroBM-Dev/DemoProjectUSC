@@ -20,9 +20,9 @@ import demoprojectusc.composeapp.generated.resources.compose_multiplatform
 @Composable
 @Preview
 fun App(sqlDriver: SqlDriver, isTopBarVisible: Boolean) {
+
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
-
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             Button(onClick = { showContent = !showContent }) {
                 Text("Click me!")
