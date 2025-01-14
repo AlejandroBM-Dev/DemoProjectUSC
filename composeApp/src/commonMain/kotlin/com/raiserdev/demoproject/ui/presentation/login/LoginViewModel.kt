@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 class LoginViewModel: ViewModel() {
 
     private val _credentials = MutableStateFlow(Pair("", ""))
+
     val credentials: StateFlow<Pair<String, String>> get() = _credentials
 
     fun onUsernameChange(newUsername: String) {

@@ -23,6 +23,7 @@ koin-compose = "4.0.0"
 koin-annotations = "2.0.0-Beta2"
 navigation-compose = "2.8.0-alpha10"
 ksp = "2.1.0-1.0.29"
+toolsCore = "1.0.0-alpha10"
 
 [libraries]
 android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "androidDriver" }
@@ -53,6 +54,7 @@ koin-annotations = {module = "io.insert-koin:koin-annotations", version.ref = "k
 koin-ksp-compiler = {module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin-annotations"}
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin-compose" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
+androidx-tools-core = { group = "androidx.privacysandbox.tools", name = "tools-core", version.ref = "toolsCore" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
