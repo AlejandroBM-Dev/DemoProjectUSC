@@ -92,6 +92,10 @@ kotlin {
             // DB sqldelight
             implementation(libs.coroutines.extensions)
 
+            // Coil
+            implementation(libs.coil.svg)
+            implementation(libs.coil.compose)
+
         }
 
         desktopMain.dependencies {

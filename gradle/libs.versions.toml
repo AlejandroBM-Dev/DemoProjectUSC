@@ -12,6 +12,7 @@ androidx-espresso-core = "3.6.1"
 androidx-lifecycle = "2.8.4"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
+coilSvg = "3.0.4"
 collection = "1.4.5"
 compose-multiplatform = "1.7.0"
 junit = "4.13.2"
@@ -28,6 +29,8 @@ toolsCore = "1.0.0-alpha10"
 [libraries]
 android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "androidDriver" }
 androidx-collection = { module = "androidx.collection:collection", version.ref = "collection" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilSvg" }
+coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coilSvg" }
 coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "androidDriver" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }

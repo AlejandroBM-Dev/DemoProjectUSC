@@ -1,5 +1,8 @@
 This is a Kotlin Multiplatform project targeting Android, iOS, Desktop.
 
+COLOR
+primary: #3980f7
+
 * `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
   It contains several subfolders:
   - `commonMain` is for code that’s common for all targets.

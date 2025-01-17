@@ -37,3 +37,5 @@ SET
     numero_telefonico = :numero_telefonico,
     fecha_actualizacion = CURRENT_TIMESTAMP
 WHERE id = :id;
+
+
