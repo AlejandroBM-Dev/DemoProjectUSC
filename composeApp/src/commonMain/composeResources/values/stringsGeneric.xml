@@ -6,7 +6,4 @@
 
     <!-- Formats -->
     <string name="formatDate">DD/MM/YYYY</string>
-
-    <!-- Error -->
-    <string name="error_exception">&gt; _ &lt;!</string>
 </resources>

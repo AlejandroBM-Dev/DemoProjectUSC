@@ -1,11 +1,12 @@
 <resources>
+    <string name="register_title">Registro</string>
 
     <string name="register_nick_name">Nickname:</string>
-
     <string name="register_name">Name:</string>
     <string name="register_father_last_name">Father's Last Name:</string>
     <string name="register_mother_last_name">Mother's Last Name:</string>
     <string name="register_birth_date">Birth Day:</string>
+    <string name="register_phone_number">Phone Number:</string>"
     <string name="register_email">Email:</string>
 
     <string name="register_password">Password:</string>

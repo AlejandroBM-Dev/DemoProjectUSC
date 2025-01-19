@@ -30,6 +30,16 @@ sealed class RegisterData {
         override val type: DataType = DataType.NUMERIC
     }
 
+    data class Phone(
+        override val title: StringResource,
+        override val icon: ImageVector,
+        override val length: Int,
+        val currentValue: StateFlow<String>,
+        override val onValueChanged: (String) -> Unit
+    ) : RegisterData() {
+        override val type: DataType = DataType.NUMERIC
+    }
+
     // Hexadecimal data
     data class Hex(
         override val title: StringResource,

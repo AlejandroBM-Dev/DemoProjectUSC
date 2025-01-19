@@ -98,6 +98,10 @@ kotlin {
 
             implementation(libs.material.icons.extended)
             implementation(libs.material3)
+
+            //DateTime
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
+
         }
         desktopMain.dependencies {
             // implementation(compose.desktop.currentOs)
