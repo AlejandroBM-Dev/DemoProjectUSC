@@ -96,8 +96,9 @@ kotlin {
             implementation(libs.coil.svg)
             implementation(libs.coil.compose)
 
+            implementation(libs.material.icons.extended)
+            implementation(libs.material3)
         }
-
         desktopMain.dependencies {
             // implementation(compose.desktop.currentOs)
             // implementation("org.jetbrains.skiko:skiko-awt-runtime-linux-x64:0.7.69")
@@ -178,6 +179,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.material3.android)
     implementation(libs.androidx.tools.core)
     debugImplementation(compose.uiTooling)
 }

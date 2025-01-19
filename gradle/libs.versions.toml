@@ -22,13 +22,18 @@ kotlinx-coroutines-core = "1.10.1"
 koin = "4.0.0"
 koin-compose = "4.0.0"
 koin-annotations = "2.0.0-Beta2"
+material3 = "1.7.0"
+materialIconsExtended = "1.7.6"
+materialIconsExtendedVersion = "1.7.3"
 navigation-compose = "2.8.0-alpha10"
 ksp = "2.1.0-1.0.29"
 toolsCore = "1.0.0-alpha10"
+material3Android = "1.3.1"
 
 [libraries]
 android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "androidDriver" }
 androidx-collection = { module = "androidx.collection:collection", version.ref = "collection" }
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilSvg" }
 coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coilSvg" }
 coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "androidDriver" }
@@ -48,6 +53,8 @@ androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-core" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 
+material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "materialIconsExtendedVersion" }
+material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
 native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "androidDriver" }
 sqlite-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "androidDriver" }
 
@@ -58,6 +65,7 @@ koin-ksp-compiler = {module = "io.insert-koin:koin-ksp-compiler", version.ref = 
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin-compose" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
 androidx-tools-core = { group = "androidx.privacysandbox.tools", name = "tools-core", version.ref = "toolsCore" }
+androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

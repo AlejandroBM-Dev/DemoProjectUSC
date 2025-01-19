@@ -3,4 +3,9 @@
     <string name="help">Ayuda</string>
     <string name="next">Siguiente</string>
     <string name="user">Usuario</string>
+
+    <!-- Formats -->
+    <string name="formatDate">DD/MM/YYYY</string>
+    <!-- Error -->
+    <string name="error_exception">&gt; _ &lt;!</string>
 </resources>

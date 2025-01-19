@@ -23,7 +23,9 @@ fun HelpScreen(onBack: () -> Unit) {
         Column(
             modifier = Modifier.fillMaxSize().padding(paddingValues)
         ) {
+
             Text("Help Screen")
+
             Spacer(modifier = Modifier.height(8.dp)) // Espaciado entre botones
 
             Button(
@@ -33,4 +35,9 @@ fun HelpScreen(onBack: () -> Unit) {
             }
         }
     }
+}
+
+@Composable
+fun Body() {
+
 }
