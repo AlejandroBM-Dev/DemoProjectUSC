@@ -100,7 +100,7 @@ kotlin {
             implementation(libs.material3)
 
             //DateTime
-            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
+            implementation(libs.kotlinx.datetime)
 
         }
         desktopMain.dependencies {
