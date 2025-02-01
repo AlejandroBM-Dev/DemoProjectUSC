@@ -3,6 +3,7 @@
     <string name="help">Help</string>
     <string name="next">Next</string>
     <string name="user">User</string>
+    <string name="back">Back</string>
 
     <!-- Formats -->
     <string name="formatDate">DD/MM/YYYY</string>

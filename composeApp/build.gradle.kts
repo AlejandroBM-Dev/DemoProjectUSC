@@ -183,6 +183,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.foundation.layout.android)
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.tools.core)
     debugImplementation(compose.uiTooling)

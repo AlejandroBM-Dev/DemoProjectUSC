@@ -22,7 +22,12 @@ fun AppNavigation(
             onLoginSuccess = {
                 // Limpia el back stack si es necesario y navega a Home
                 navController.navigate(Screen.Home.route) {
-                    popUpTo(Screen.Login.route) { inclusive = true }
+                    popUpTo(Screen.Home.route) { inclusive = true }
+                }
+            },
+            onRegisterSuccess = {
+                navController.navigate(Screen.Login.route) {
+                    popUpTo(Screen.Login.route) {inclusive = true}
                 }
             }
         )

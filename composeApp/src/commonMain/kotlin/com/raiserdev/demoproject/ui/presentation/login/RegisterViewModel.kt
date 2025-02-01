@@ -7,14 +7,10 @@ import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.SmartToy
 import androidx.compose.material.icons.filled.Smartphone
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.raiserdev.demoproject.data.db.model.Usuario
 import com.raiserdev.demoproject.data.domain.data.RegisterData
 import demoprojectusc.composeapp.generated.resources.Res
-import demoprojectusc.composeapp.generated.resources.error_date_format
-import demoprojectusc.composeapp.generated.resources.error_exception
 import demoprojectusc.composeapp.generated.resources.register_birth_date
 import demoprojectusc.composeapp.generated.resources.register_email
 import demoprojectusc.composeapp.generated.resources.register_father_last_name
@@ -26,8 +22,6 @@ import demoprojectusc.composeapp.generated.resources.register_phone_number
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.datetime.LocalDate
-import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.stringResource
 
 class RegisterViewModel: ViewModel() {
 
@@ -61,7 +55,7 @@ class RegisterViewModel: ViewModel() {
     val birthDate: StateFlow<String> get() = _birthDate
     val email: StateFlow<String> get() = _email
     val phoneNumber: StateFlow<String> get() = _phoneNumber
-    val password: StateFlow<Pair<String, String>> get() = _password
+    val password: StateFlow<Pair<String,String>> get() = _password
 
 
     fun onNameChange(newName: String) { _name.value = newName }
@@ -73,8 +67,15 @@ class RegisterViewModel: ViewModel() {
     }
     fun onEmailChange(newEmail: String) { _email.value = newEmail }
     fun onPhoneNumberChange(phoneNumber: String) { _phoneNumber.value = phoneNumber }
-    fun onPasswordChange(newPassword: String) { _password.value = _password.value.copy(first = newPassword) }
-    fun onConfirmPasswordChange(newConfirmPassword: String) { _password.value = _password.value.copy(second = newConfirmPassword) }
+
+    fun onPasswordChange(newPassword: String) {
+        val validatePassword = _password.value.second
+        _password.value = Pair(newPassword,validatePassword)
+    }
+    fun onSecondPasswordChange(validatePassword: String) {
+        val newPassword = _password.value.first
+        _password.value = Pair(newPassword,validatePassword)
+    }
 
     fun showError(
         dateString: String,
@@ -170,5 +171,11 @@ class RegisterViewModel: ViewModel() {
             e.printStackTrace()
             null
         }
+    }
+
+
+
+    fun onRegisterValidate(userData: Usuario) {
+        userData.nickname = _nickName.value
     }
 }

@@ -49,11 +49,11 @@ fun nothingHere() {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            stringResource(Res.string.error_exception),
+            text = stringResource(Res.string.error_exception),
             fontSize = 70.sp,
         )
         Text(
-            "Lo sentimos no hay nada por aquí",
+            text = "Lo sentimos no hay nada por aquí",
             style = MaterialTheme.typography.h4
         )
     }

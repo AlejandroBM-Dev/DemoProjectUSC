@@ -13,7 +13,8 @@ import org.koin.compose.viewmodel.koinViewModel
 
 fun NavGraphBuilder.loginNavGraph(
     navController: NavHostController,
-    onLoginSuccess: () -> Unit // Callback para pasar al siguiente flujo
+    onLoginSuccess: () -> Unit, // Callback para pasar al siguiente flujo
+    onRegisterSuccess: () -> Unit,
 ) {
     composable(Screen.Login.route) {
         val loginVM = koinViewModel<LoginViewModel>()
@@ -29,14 +30,16 @@ fun NavGraphBuilder.loginNavGraph(
             }
         )
     }
+
     composable(Screen.Register.route) {
         RegisterScreen(
-            onRegisterSuccess = onLoginSuccess,
+            onRegisterSuccess = onRegisterSuccess,
             onHelpClick = {
                 navController.navigate(Screen.Help.route)
             }
         )
     }
+
     composable(Screen.Help.route) {
         HelpScreen(
             onBack = {

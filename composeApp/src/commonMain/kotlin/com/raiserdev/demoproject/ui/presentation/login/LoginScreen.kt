@@ -2,7 +2,6 @@ package com.raiserdev.demoproject.ui.presentation.login
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -91,9 +90,7 @@ fun BodyView(
     onRegisterClick: () -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxSize(1f),
+        modifier = Modifier.fillMaxSize(0.9f),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -169,10 +166,13 @@ fun BodyView(
 fun FootView(
     onHelpClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(8.dp),
-        verticalAlignment = Alignment.Bottom,
-        horizontalArrangement = Arrangement.End
+    Column(
+        modifier = Modifier
+            .wrapContentHeight()
+            .fillMaxWidth()
+            .padding(8.dp),
+        horizontalAlignment = Alignment.End,
+        verticalArrangement = Arrangement.Bottom
     ) {
 
         Spacer(modifier = Modifier.height(8.dp)) // Espaciado entre botones
