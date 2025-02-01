@@ -175,7 +175,19 @@ class RegisterViewModel: ViewModel() {
 
 
 
-    fun onRegisterValidate(userData: Usuario) {
-        userData.nickname = _nickName.value
+    fun onRegisterValidate() {
+        val addUser = Usuario(
+            0,
+            userName = _name.value,
+            userFathersName = _fatherLastName.value,
+            userMothersName = _motherLastName.value,
+            email = _email.value,
+            password = _password.value.first,
+            nickname = _nickName.value,
+            numeroTelefonico = _phoneNumber.value,
+            fechaCreacion = "in progress",
+            fechaActualizacion = "in progress.",
+            birthDate = _birthDate.value
+        )
     }
 }

@@ -1,6 +1,9 @@
 CREATE TABLE usuarios (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL UNIQUE,
+    user_fathers_name TEXT NOT NULL UNIQUE,
+    user_mothers_name TEXT NOT NULL UNIQUE,
+    birth_date TEXT NOT NULL UNIQUE,
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
     nickname TEXT,
@@ -18,9 +21,9 @@ WHERE id = ?;
 
 insertUsuario:
 INSERT OR REPLACE INTO usuarios(
-    id, username, email, password, nickname, numero_telefonico, fecha_creacion, fecha_actualizacion
+    id, username, user_fathers_name,user_mothers_name, birth_date,email, password, nickname, numero_telefonico, fecha_creacion, fecha_actualizacion
 ) VALUES (
-    ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+    ?, ?, ?,?,?,?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 );
 
 deleteUsuario:
@@ -31,6 +34,9 @@ updateUsuario:
 UPDATE usuarios
 SET 
     username = :username,
+    user_fathers_name =:user_fathers_name,
+    user_mothers_name =:user_mothers_name,
+    birth_date =:birth_date,
     email = :email,
     password = :password,
     nickname = :nickname,
