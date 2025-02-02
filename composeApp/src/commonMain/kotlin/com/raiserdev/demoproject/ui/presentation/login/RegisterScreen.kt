@@ -21,14 +21,13 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -113,12 +112,17 @@ fun bodyView(
             when (data) {
                 is RegisterData.Text -> {
                     val currentValue by data.currentValue.collectAsState()
-                    TextField(
+
+                    OutlinedTextField(
                         leadingIcon = {
                             Icon(
                                 imageVector = data.icon,
                                 contentDescription = "${stringResource(data.title)} input text."
                             )
+                        },
+                        isError = currentValue.isEmpty() ,
+                        supportingText = {
+                            Text("Campo requerido.")
                         },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
@@ -136,7 +140,7 @@ fun bodyView(
                 }
                 is RegisterData.Date -> {
                     val currentValue by data.currentValue.collectAsState()
-                    TextField(
+                    OutlinedTextField(
                         value = currentValue,
                         leadingIcon = {
                             Icon(
@@ -144,6 +148,7 @@ fun bodyView(
                                 contentDescription = "${stringResource(data.title)} input text."
                             )
                         },
+                        isError = currentValue.isEmpty() ,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Number,
                             imeAction = ImeAction.Next
@@ -160,7 +165,7 @@ fun bodyView(
                 }
                 is RegisterData.Phone -> {
                     val currentValue by data.currentValue.collectAsState()
-                    TextField(
+                    OutlinedTextField(
                         value = currentValue,
                         leadingIcon = {
                             Icon(
@@ -168,6 +173,7 @@ fun bodyView(
                                 contentDescription = "${stringResource(data.title)} input text."
                             )
                         },
+                        isError = currentValue.isNotEmpty(),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Phone,
                             imeAction = ImeAction.Next
@@ -194,7 +200,7 @@ fun bodyView(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-                        TextField(
+                        OutlinedTextField(
                             value = currentValue.first,
                             leadingIcon = {
                                 Icon(
@@ -225,7 +231,7 @@ fun bodyView(
                             maxLines = 1
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        TextField(
+                        OutlinedTextField(
                             value = currentValue.second,
                             leadingIcon = {
                                 Icon(

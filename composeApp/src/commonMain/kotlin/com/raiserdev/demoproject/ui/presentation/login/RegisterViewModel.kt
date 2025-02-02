@@ -7,9 +7,11 @@ import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.SmartToy
 import androidx.compose.material.icons.filled.Smartphone
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.raiserdev.demoproject.data.db.model.Usuario
 import com.raiserdev.demoproject.data.domain.data.RegisterData
+import com.raiserdev.demoproject.ui.state.FieldState
 import demoprojectusc.composeapp.generated.resources.Res
 import demoprojectusc.composeapp.generated.resources.register_birth_date
 import demoprojectusc.composeapp.generated.resources.register_email
@@ -27,6 +29,7 @@ class RegisterViewModel: ViewModel() {
 
     companion object {
         private const val MAX_DATE_LENGTH = 8
+        private const val MAX_VALIDATE_TEXT = 3
     }
     private val nameIcon = Icons.Default.Face
     private val nickNameIcon = Icons.Default.SmartToy
@@ -35,8 +38,9 @@ class RegisterViewModel: ViewModel() {
     private val phoneNumberIcon = Icons.Default.Smartphone
     private val passwordIcon = Icons.Default.Lock
 
-    // 3) Expose the list of fields (if needed) as a public property or Flow
-    val fields: List<RegisterData> get() = _fields
+    val fields: List<RegisterData> get() = _fields //Todos mis campos que se agregaran en el registro.
+
+    private val _fieldState = MutableStateFlow(FieldState())
 
     private val _name = MutableStateFlow("")
     private val _nickName = MutableStateFlow("")
@@ -47,6 +51,8 @@ class RegisterViewModel: ViewModel() {
     private val _phoneNumber = MutableStateFlow("")
     private val _password = MutableStateFlow(Pair("",""))
     private val _confirmPassword = MutableStateFlow("")
+
+    val fieldState: StateFlow<FieldState> = _fieldState
 
     val name: StateFlow<String> get() = _name
     val nickName: StateFlow<String> get() = _nickName
@@ -170,6 +176,30 @@ class RegisterViewModel: ViewModel() {
             // Por ejemplo, si es 30 de Feb o 31 de Nov, etc.
             e.printStackTrace()
             null
+        }
+    }
+
+    // Lógica de validación
+    private fun validateText(text: String) {
+        when {
+            text.isEmpty() -> {
+                _fieldState.value = _fieldState.value.copy(
+                    isError = true,
+                    errorMessage = "Campo requerido."
+                )
+            }
+            text.length <= MAX_VALIDATE_TEXT -> {
+                _fieldState.value = _fieldState.value.copy(
+                    isError = true,
+                    errorMessage = "Debe tener más de $MAX_VALIDATE_TEXT caracteres."
+                )
+            }
+            else -> {
+                _fieldState.value = _fieldState.value.copy(
+                    isError = false,
+                    errorMessage = null
+                )
+            }
         }
     }
 
