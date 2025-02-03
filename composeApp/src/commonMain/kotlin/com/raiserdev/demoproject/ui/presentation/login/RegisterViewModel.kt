@@ -40,34 +40,138 @@ class RegisterViewModel: ViewModel() {
 
     val fields: List<RegisterData> get() = _fields //Todos mis campos que se agregaran en el registro.
 
-    private val _fieldState = MutableStateFlow(FieldState())
+    private val _nameFieldState = MutableStateFlow(FieldState())
+    private val _nickNameFieldState = MutableStateFlow(FieldState())
+    private val _fatherLastNameFieldState = MutableStateFlow(FieldState())
+    private val _motherLastNameFieldState = MutableStateFlow(FieldState())
+    //private val _birthDateFieldState = MutableStateFlow(String)
+    private val _phoneFieldState = MutableStateFlow(FieldState())
 
-    private val _name = MutableStateFlow("")
-    private val _nickName = MutableStateFlow("")
-    private val _fatherLastName = MutableStateFlow("")
-    private val _motherLastName = MutableStateFlow("")
+    private val _emailFieldState = MutableStateFlow(FieldState())
     private val _birthDate = MutableStateFlow("")
     private val _email = MutableStateFlow("")
     private val _phoneNumber = MutableStateFlow("")
     private val _password = MutableStateFlow(Pair("",""))
     private val _confirmPassword = MutableStateFlow("")
 
-    val fieldState: StateFlow<FieldState> = _fieldState
+    val nameFieldState: StateFlow<FieldState> = _nameFieldState
 
-    val name: StateFlow<String> get() = _name
-    val nickName: StateFlow<String> get() = _nickName
-    val fatherLastName: StateFlow<String> get() = _fatherLastName
-    val motherLastName: StateFlow<String> get() = _motherLastName
+    val name: StateFlow<FieldState> get() = _nameFieldState
+    val nickName: StateFlow<FieldState> get() = _nickNameFieldState
+    val fatherLastName: StateFlow<FieldState> get() = _fatherLastNameFieldState
+    val motherLastName: StateFlow<FieldState> get() = _motherLastNameFieldState
     val birthDate: StateFlow<String> get() = _birthDate
-    val email: StateFlow<String> get() = _email
-    val phoneNumber: StateFlow<String> get() = _phoneNumber
+    val email: StateFlow<FieldState> get() = _emailFieldState
+    val phoneNumber: StateFlow<FieldState> get() = _phoneFieldState
     val password: StateFlow<Pair<String,String>> get() = _password
 
 
-    fun onNameChange(newName: String) { _name.value = newName }
-    fun onNickNameChange(newNickName: String) { _nickName.value = newNickName }
-    fun onFatherLastNameChange(newFatherLastName: String) { _fatherLastName.value = newFatherLastName }
-    fun onMotherLastNameChange(newMotherLastName: String) { _motherLastName.value = newMotherLastName }
+    // Lógica de validación
+    private fun validateNickNameText(text: String) {
+        when {
+            text.isEmpty() -> {
+                _nickNameFieldState.value = _nickNameFieldState.value.copy(
+                    text = text,
+                    isError = true,
+                    errorMessage = "Campo requerido."
+                )
+            }
+            text.length <= MAX_VALIDATE_TEXT -> {
+                _nickNameFieldState.value = _nickNameFieldState.value.copy(
+                    text = text,
+                    isError = true,
+                    errorMessage = "Debe tener más de $MAX_VALIDATE_TEXT caracteres."
+                )
+            }
+            else -> {
+                _nickNameFieldState.value = _nickNameFieldState.value.copy(
+                    text = text,
+                    isError = false,
+                    errorMessage = null
+                )
+            }
+        }
+    }
+
+    private fun validateNameText(text: String) {
+        when {
+            text.isEmpty() -> {
+                _nameFieldState.value = _nameFieldState.value.copy(
+                    text = text,
+                    isError = true,
+                    errorMessage = "Campo requerido."
+                )
+            }
+            text.length <= MAX_VALIDATE_TEXT -> {
+                _nameFieldState.value = _nameFieldState.value.copy(
+                    text = text,
+                    isError = true,
+                    errorMessage = "Debe tener más de $MAX_VALIDATE_TEXT caracteres."
+                )
+            }
+            else -> {
+                _nameFieldState.value = _nameFieldState.value.copy(
+                    text = text,
+                    isError = false,
+                    errorMessage = null
+                )
+            }
+        }
+    }
+
+    private fun validateFathersLastNameText(text: String) {
+        when {
+            text.isEmpty() -> {
+                _fatherLastNameFieldState.value = _fatherLastNameFieldState.value.copy(
+                    text = text,
+                    isError = true,
+                    errorMessage = "Campo requerido."
+                )
+            }
+            text.length <= MAX_VALIDATE_TEXT -> {
+                _fatherLastNameFieldState.value = _fatherLastNameFieldState.value.copy(
+                    text = text,
+                    isError = true,
+                    errorMessage = "Debe tener más de $MAX_VALIDATE_TEXT caracteres."
+                )
+            }
+            else -> {
+                _fatherLastNameFieldState.value = _fatherLastNameFieldState.value.copy(
+                    text = text,
+                    isError = false,
+                    errorMessage = null
+                )
+            }
+        }
+    }
+
+    private fun validateMothersLastNameText(text: String) {
+        when {
+            text.isEmpty() -> {
+                _motherLastNameFieldState.value = _motherLastNameFieldState.value.copy(
+                    text = text,
+                    isError = true,
+                    errorMessage = "Campo requerido."
+                )
+            }
+            text.length <= MAX_VALIDATE_TEXT -> {
+                _motherLastNameFieldState.value = _motherLastNameFieldState.value.copy(
+                    text = text,
+                    isError = true,
+                    errorMessage = "Debe tener más de $MAX_VALIDATE_TEXT caracteres."
+                )
+            }
+            else -> {
+                _motherLastNameFieldState.value = _motherLastNameFieldState.value.copy(
+                    text = text,
+                    isError = false,
+                    errorMessage = null
+                )
+            }
+        }
+    }
+
+
     fun onBirthDateChange(newBirthDate: String) {
         _birthDate.value = newBirthDate
     }
@@ -102,29 +206,29 @@ class RegisterViewModel: ViewModel() {
             title = Res.string.register_nick_name,
             icon = nickNameIcon,
             length = 12,
-            currentValue = nickName,
-            onValueChanged = ::onNickNameChange
+            fieldState = nickName,
+            onValueChanged = ::validateNickNameText
         ),
         RegisterData.Text(
             title = Res.string.register_name,
             icon = nameIcon,
             length = 25,
-            currentValue = name,
-            onValueChanged = ::onNameChange
+            fieldState = name,
+            onValueChanged = ::validateNameText
         ),
         RegisterData.Text(
             title = Res.string.register_father_last_name,
             icon = nameIcon,
             length = 25,
-            currentValue = fatherLastName,
-            onValueChanged = ::onFatherLastNameChange
+            fieldState = fatherLastName,
+            onValueChanged = ::validateFathersLastNameText
         ),
         RegisterData.Text(
             title = Res.string.register_mother_last_name,
             icon = nameIcon,
             length = 25,
-            currentValue = motherLastName,
-            onValueChanged = ::onMotherLastNameChange
+            fieldState = motherLastName,
+            onValueChanged = ::validateMothersLastNameText
         ),
         RegisterData.Date(
             title = Res.string.register_birth_date,
@@ -137,14 +241,14 @@ class RegisterViewModel: ViewModel() {
             title = Res.string.register_email,
             icon = emailIcon,
             length = 50,
-            currentValue = email,
+            fieldState = email,
             onValueChanged = ::onEmailChange
         ),
         RegisterData.Text(
             title = Res.string.register_phone_number,
             icon = phoneNumberIcon,
             length = 20,
-            currentValue = phoneNumber,
+            fieldState = phoneNumber,
             onValueChanged = ::onPhoneNumberChange
         ),
         RegisterData.Auth(
@@ -179,33 +283,10 @@ class RegisterViewModel: ViewModel() {
         }
     }
 
-    // Lógica de validación
-    private fun validateText(text: String) {
-        when {
-            text.isEmpty() -> {
-                _fieldState.value = _fieldState.value.copy(
-                    isError = true,
-                    errorMessage = "Campo requerido."
-                )
-            }
-            text.length <= MAX_VALIDATE_TEXT -> {
-                _fieldState.value = _fieldState.value.copy(
-                    isError = true,
-                    errorMessage = "Debe tener más de $MAX_VALIDATE_TEXT caracteres."
-                )
-            }
-            else -> {
-                _fieldState.value = _fieldState.value.copy(
-                    isError = false,
-                    errorMessage = null
-                )
-            }
-        }
-    }
 
 
 
-    fun onRegisterValidate() {
+    /*fun onRegisterValidate() {
         val addUser = Usuario(
             0,
             userName = _name.value,
@@ -219,5 +300,5 @@ class RegisterViewModel: ViewModel() {
             fechaActualizacion = "in progress.",
             birthDate = _birthDate.value
         )
-    }
+    }*/
 }

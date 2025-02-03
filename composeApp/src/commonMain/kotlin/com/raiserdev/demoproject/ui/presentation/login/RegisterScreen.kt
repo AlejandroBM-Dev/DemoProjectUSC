@@ -111,8 +111,7 @@ fun bodyView(
         items(dataRecord) { data ->
             when (data) {
                 is RegisterData.Text -> {
-                    val currentValue by data.currentValue.collectAsState()
-
+                    val fieldState by data.fieldState.collectAsState()
                     OutlinedTextField(
                         leadingIcon = {
                             Icon(
@@ -120,9 +119,11 @@ fun bodyView(
                                 contentDescription = "${stringResource(data.title)} input text."
                             )
                         },
-                        isError = currentValue.isEmpty() ,
+                        isError = fieldState.isError ,
                         supportingText = {
-                            Text("Campo requerido.")
+                            if (fieldState.isError) {
+                                Text(fieldState.errorMessage ?: "")
+                            }
                         },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
@@ -131,7 +132,7 @@ fun bodyView(
                         keyboardActions = KeyboardActions(
                             onDone = { focusManager.moveFocus(FocusDirection.Next) }
                         ),
-                        value = currentValue,
+                        value = fieldState.text,
                         onValueChange = { if (it.length <= data.length) data.onValueChanged(it) },
                         label = { Text(text = stringResource(data.title)) },
                         modifier = modifierLazyColumn,
