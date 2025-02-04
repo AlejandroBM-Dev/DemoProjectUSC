@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel
 import com.raiserdev.demoproject.data.db.model.Usuario
 import com.raiserdev.demoproject.data.domain.data.RegisterData
 import com.raiserdev.demoproject.ui.state.FieldState
+import com.raiserdev.demoproject.utils.showToast
 import demoprojectusc.composeapp.generated.resources.Res
 import demoprojectusc.composeapp.generated.resources.register_birth_date
 import demoprojectusc.composeapp.generated.resources.register_email
@@ -44,11 +45,11 @@ class RegisterViewModel: ViewModel() {
     private val _nickNameFieldState = MutableStateFlow(FieldState())
     private val _fatherLastNameFieldState = MutableStateFlow(FieldState())
     private val _motherLastNameFieldState = MutableStateFlow(FieldState())
-    //private val _birthDateFieldState = MutableStateFlow(String)
+    private val _birthDateFieldState = MutableStateFlow(FieldState())
     private val _phoneFieldState = MutableStateFlow(FieldState())
 
     private val _emailFieldState = MutableStateFlow(FieldState())
-    private val _birthDate = MutableStateFlow("")
+    private val _birthDate = MutableStateFlow(FieldState())
     private val _email = MutableStateFlow("")
     private val _phoneNumber = MutableStateFlow("")
     private val _password = MutableStateFlow(Pair("",""))
@@ -60,7 +61,8 @@ class RegisterViewModel: ViewModel() {
     val nickName: StateFlow<FieldState> get() = _nickNameFieldState
     val fatherLastName: StateFlow<FieldState> get() = _fatherLastNameFieldState
     val motherLastName: StateFlow<FieldState> get() = _motherLastNameFieldState
-    val birthDate: StateFlow<String> get() = _birthDate
+    val birthDate: StateFlow<FieldState> get() = _birthDateFieldState
+
     val email: StateFlow<FieldState> get() = _emailFieldState
     val phoneNumber: StateFlow<FieldState> get() = _phoneFieldState
     val password: StateFlow<Pair<String,String>> get() = _password
@@ -145,6 +147,19 @@ class RegisterViewModel: ViewModel() {
         }
     }
 
+    private fun validateBirthDayTate(text: String) {
+        when {
+            text.isEmpty() -> {
+                _birthDateFieldState.value = _birthDateFieldState.value.copy(
+                    text = text,
+                    isError = true,
+                    errorMessage = "BirthDate requerido."
+                )
+            }
+        }
+        parseDdMmYyyy(text)
+    }
+
     private fun validateMothersLastNameText(text: String) {
         when {
             text.isEmpty() -> {
@@ -172,9 +187,9 @@ class RegisterViewModel: ViewModel() {
     }
 
 
-    fun onBirthDateChange(newBirthDate: String) {
+    /*fun onBirthDateChange(newBirthDate: String) {
         _birthDate.value = newBirthDate
-    }
+    }*/
     fun onEmailChange(newEmail: String) { _email.value = newEmail }
     fun onPhoneNumberChange(phoneNumber: String) { _phoneNumber.value = phoneNumber }
 
@@ -192,7 +207,7 @@ class RegisterViewModel: ViewModel() {
         onShowError: (Boolean) -> Unit
     ) {
         if (dateString.length == MAX_DATE_LENGTH) {
-            val date = parseDdMmYyyy(_birthDate.value)
+            val date = parseDdMmYyyy(birthDate.value.text)
             if (date == null) {
                 onShowError.invoke(true)
             } else {
@@ -234,8 +249,8 @@ class RegisterViewModel: ViewModel() {
             title = Res.string.register_birth_date,
             icon = calendarIcon,
             length = 10,
-            currentValue = birthDate,
-            onValueChanged = ::onBirthDateChange
+            fieldState = birthDate,
+            onValueChanged = ::validateBirthDayTate
         ),
         RegisterData.Text(
             title = Res.string.register_email,
@@ -269,6 +284,8 @@ class RegisterViewModel: ViewModel() {
         val month = parts[1].toIntOrNull() ?: return null
         val year = parts[2].toIntOrNull() ?: return null
 
+        println("day $day month $month year $year")
+
         // Validaciones de rango
         if (day !in 1..31) return null
         if (month !in 1..12) return null
@@ -283,22 +300,23 @@ class RegisterViewModel: ViewModel() {
         }
     }
 
+    fun setRegister(isSucces: (Boolean) -> Unit){
 
+        if (
+            (nickName.value.isError || nickName.value.text.isEmpty()) ||
+            (name.value.isError || name.value.text.isEmpty()) ||
+            (fatherLastName.value.isError || fatherLastName.value.text.isEmpty()) ||
+            (motherLastName.value.isError || motherLastName.value.text.isEmpty())
+        ) {
+            validateNameText(name.value.text)
+            validateNickNameText(nickName.value.text)
+            validateFathersLastNameText(fatherLastName.value.text)
+            validateMothersLastNameText(motherLastName.value.text)
 
+            isSucces.invoke(false)
+        } else {
+            isSucces.invoke(true)
+        }
 
-    /*fun onRegisterValidate() {
-        val addUser = Usuario(
-            0,
-            userName = _name.value,
-            userFathersName = _fatherLastName.value,
-            userMothersName = _motherLastName.value,
-            email = _email.value,
-            password = _password.value.first,
-            nickname = _nickName.value,
-            numeroTelefonico = _phoneNumber.value,
-            fechaCreacion = "in progress",
-            fechaActualizacion = "in progress.",
-            birthDate = _birthDate.value
-        )
-    }*/
+    }
 }

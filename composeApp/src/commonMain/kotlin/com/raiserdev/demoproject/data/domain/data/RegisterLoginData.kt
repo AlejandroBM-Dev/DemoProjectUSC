@@ -80,7 +80,7 @@ sealed class RegisterData {
         override val title: StringResource,
         override val icon: ImageVector,
         override val length: Int,
-        val currentValue: StateFlow<String>,
+        val fieldState: StateFlow<FieldState>,
         override val onValueChanged: (String) -> Unit
     ) : RegisterData() {
         override val type: DataType = DataType.DATE

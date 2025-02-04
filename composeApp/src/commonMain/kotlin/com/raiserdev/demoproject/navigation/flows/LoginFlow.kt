@@ -36,6 +36,9 @@ fun NavGraphBuilder.loginNavGraph(
             onRegisterSuccess = onRegisterSuccess,
             onHelpClick = {
                 navController.navigate(Screen.Help.route)
+            },
+            onBack = {
+                navController.popBackStack()
             }
         )
     }

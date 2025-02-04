@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,7 +19,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -46,9 +44,13 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.raiserdev.demoproject.data.domain.data.RegisterData
+import com.raiserdev.demoproject.ui.common.AppTopBar
+import com.raiserdev.demoproject.utils.showToast
 import com.raiserdev.demoproject.utils.transformation.DateTransformation
 import demoprojectusc.composeapp.generated.resources.Res
+import demoprojectusc.composeapp.generated.resources.accept
 import demoprojectusc.composeapp.generated.resources.formatDate
+import demoprojectusc.composeapp.generated.resources.help
 import demoprojectusc.composeapp.generated.resources.register_title
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -56,27 +58,37 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun RegisterScreen(
     onRegisterSuccess: () -> Unit,
-    onHelpClick: () -> Unit
+    onHelpClick: () -> Unit,
+    onBack: () -> Unit
 ) {
     val registerVM = koinViewModel<RegisterViewModel>()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        topBar = {
+            AppTopBar(
+                title = stringResource(Res.string.register_title),
+                onBack = {
+                    onBack()
+                },
+                onSettingsClick = {}
+            )
+        }
     ) { paddingValues ->
-        Column(
+        Column (
             modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 16.dp, end = 16.dp, top = paddingValues.calculateTopPadding(), bottom = 16.dp),
-            verticalArrangement = Arrangement.Center,
+                .padding(paddingValues),
+            verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            head()
 
             bodyView(
-                registerVM
+                registerViewModel = registerVM,
+                modifier = Modifier.weight(1f),
             )
 
             foot(
+                registerViewModel = registerVM,
                 onRegisterSuccess = onRegisterSuccess,
                 onHelpClick = onHelpClick
             )
@@ -86,23 +98,16 @@ fun RegisterScreen(
 }
 
 @Composable
-fun head() {
-    Text(
-        text = stringResource(Res.string.register_title),
-        style = MaterialTheme.typography.h3,
-    )
-}
-
-@Composable
 fun bodyView(
-    registerViewModel: RegisterViewModel
+    registerViewModel: RegisterViewModel,
+    modifier: Modifier,
 ) {
 
     val dataRecord = registerViewModel.fields
     val focusManager = LocalFocusManager.current
 
     LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -140,16 +145,21 @@ fun bodyView(
                     )
                 }
                 is RegisterData.Date -> {
-                    val currentValue by data.currentValue.collectAsState()
+                    val fieldState by data.fieldState.collectAsState()
                     OutlinedTextField(
-                        value = currentValue,
+                        value = fieldState.text,
                         leadingIcon = {
                             Icon(
                                 imageVector = data.icon,
                                 contentDescription = "${stringResource(data.title)} input text."
                             )
                         },
-                        isError = currentValue.isEmpty() ,
+                        isError = fieldState.isError ,
+                        supportingText = {
+                            if (fieldState.isError) {
+                                Text(fieldState.errorMessage ?: "")
+                            }
+                        },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Number,
                             imeAction = ImeAction.Next
@@ -273,20 +283,36 @@ fun bodyView(
 
 @Composable
 fun foot(
+    registerViewModel: RegisterViewModel,
     onRegisterSuccess: () -> Unit,
     onHelpClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier.wrapContentHeight().fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                start = 16.dp,
+                top = 0.dp,
+                end = 16.dp,
+                bottom = 16.dp
+            ),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Button(
             modifier = Modifier.fillMaxWidth(0.4f).weight(0.9f),
-            onClick = onRegisterSuccess
+            onClick = {
+                registerViewModel.setRegister { success ->
+                    if (success) {
+                        onRegisterSuccess()
+                    } else {
+                        showToast("Error al registrarse.")
+                    }
+                }
+            }
         ) {
             Text(
-                "RegisterSuccess"
+                stringResource(Res.string.accept),
             )
         }
         Spacer(modifier = Modifier.width(8.dp)) // Espaciado entre botones
@@ -294,7 +320,9 @@ fun foot(
             modifier = Modifier.fillMaxWidth(0.4f).weight(0.9f),
             onClick = onHelpClick
         ) {
-            Text("Help")
+            Text(
+                stringResource(Res.string.help),
+            )
         }
     }
 

@@ -1,5 +1,9 @@
 <resources>
+    <string name="accept">Aceptar</string>
+
+    <string name="cancel">Cancelar</string>
     <string name="continue">Continuar</string>
+
     <string name="help">Ayuda</string>
     <string name="next">Siguiente</string>
     <string name="user">Usuario</string>
