@@ -7,12 +7,9 @@ import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.SmartToy
 import androidx.compose.material.icons.filled.Smartphone
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.raiserdev.demoproject.data.db.model.Usuario
 import com.raiserdev.demoproject.data.domain.data.RegisterData
 import com.raiserdev.demoproject.ui.state.FieldState
-import com.raiserdev.demoproject.utils.showToast
 import demoprojectusc.composeapp.generated.resources.Res
 import demoprojectusc.composeapp.generated.resources.register_birth_date
 import demoprojectusc.composeapp.generated.resources.register_email
@@ -24,7 +21,10 @@ import demoprojectusc.composeapp.generated.resources.register_password
 import demoprojectusc.composeapp.generated.resources.register_phone_number
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 class RegisterViewModel: ViewModel() {
 
@@ -147,17 +147,35 @@ class RegisterViewModel: ViewModel() {
         }
     }
 
-    private fun validateBirthDayTate(text: String) {
-        when {
-            text.isEmpty() -> {
-                _birthDateFieldState.value = _birthDateFieldState.value.copy(
-                    text = text,
-                    isError = true,
-                    errorMessage = "BirthDate requerido."
-                )
+    private fun validateBirthDayDate(text: String) {
+        val parse = parseDdMmYyyy(text)
+        if (parse.isNullOrEmpty()) {
+            when {
+                text.isEmpty() -> {
+                    _birthDateFieldState.value = _birthDateFieldState.value.copy(
+                        text = text,
+                        isError = true,
+                        errorMessage = "BirthDate requerido."
+                    )
+                }
+
+                else -> {
+                    _birthDateFieldState.value = _birthDateFieldState.value.copy(
+                        text = text,
+                        isError = false,
+                        errorMessage = null
+                    )
+                }
             }
+        } else {
+            println(" parse_ $parse")
+            _birthDateFieldState.value = _birthDateFieldState.value.copy(
+                text = text,
+                isError = true,
+                errorMessage = parse
+            )
         }
-        parseDdMmYyyy(text)
+
     }
 
     private fun validateMothersLastNameText(text: String) {
@@ -250,7 +268,7 @@ class RegisterViewModel: ViewModel() {
             icon = calendarIcon,
             length = 10,
             fieldState = birthDate,
-            onValueChanged = ::validateBirthDayTate
+            onValueChanged = ::validateBirthDayDate
         ),
         RegisterData.Text(
             title = Res.string.register_email,
@@ -275,27 +293,36 @@ class RegisterViewModel: ViewModel() {
         ),
     )
 
-    private fun parseDdMmYyyy(dateString: String): LocalDate? {
-        // Verificamos que tenga 3 partes: DD, MM, YYYY
-        val parts = dateString.split("/")
-        if (parts.size != 3) return null
+    private fun parseDdMmYyyy(dateString: String): String? {
+        println("dateString: $dateString")
 
-        val day = parts[0].toIntOrNull() ?: return null
-        val month = parts[1].toIntOrNull() ?: return null
-        val year = parts[2].toIntOrNull() ?: return null
+        // 1. Validar longitud (sin separadores => 8 caracteres)
+        if (dateString.length != 8) return "Formato incorrecto"
 
-        println("day $day month $month year $year")
+        // 2. Extraer día, mes y año
+        val day = dateString.substring(0, 2).toIntOrNull() ?: return "Día incorrecto"
+        val month = dateString.substring(2, 4).toIntOrNull() ?: return "Mes incorrecto"
+        val year = dateString.substring(4, 8).toIntOrNull() ?: return "Año incorrecto"
+        println("day:$day _ month: $month _ year:$year")
 
-        // Validaciones de rango
-        if (day !in 1..31) return null
-        if (month !in 1..12) return null
+        // 3. Revisar rangos básicos
+        if (day !in 1..31) return "Dia incorrecto"
+        if (month !in 1..12) return "Mes incorrecto"
 
-        // Crea el LocalDate; si la combinación día-mes-año es inválida, lanza excepción
-        return try {
+        // 4. Construir LocalDate de kotlinx.datetime
+        val date = try {
             LocalDate(year, month, day)
         } catch (e: IllegalArgumentException) {
-            // Por ejemplo, si es 30 de Feb o 31 de Nov, etc.
-            e.printStackTrace()
+            // Cae aquí si la combinación no existe (ej. 31/11/2023, 29/02 en año no bisiesto, etc.)
+            return "Día incorrecto"
+        }
+
+        // 5. Comparar con la fecha actual (Clock.System.now())
+        val currentDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+
+        return if (date > currentDate.date) {
+            "Formato mayor al date actual"
+        } else {
             null
         }
     }
