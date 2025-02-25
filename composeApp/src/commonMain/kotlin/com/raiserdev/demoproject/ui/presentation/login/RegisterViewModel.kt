@@ -31,6 +31,8 @@ class RegisterViewModel: ViewModel() {
     companion object {
         private const val MAX_DATE_LENGTH = 8
         private const val MAX_VALIDATE_TEXT = 3
+        private val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z0-9]+$".toRegex()
+
     }
     private val nameIcon = Icons.Default.Face
     private val nickNameIcon = Icons.Default.SmartToy
@@ -50,8 +52,7 @@ class RegisterViewModel: ViewModel() {
 
     private val _emailFieldState = MutableStateFlow(FieldState())
     private val _birthDate = MutableStateFlow(FieldState())
-    private val _email = MutableStateFlow("")
-    private val _phoneNumber = MutableStateFlow("")
+    private val _phoneNumber = MutableStateFlow(FieldState())
     private val _password = MutableStateFlow(Pair("",""))
     private val _confirmPassword = MutableStateFlow("")
 
@@ -208,8 +209,42 @@ class RegisterViewModel: ViewModel() {
     /*fun onBirthDateChange(newBirthDate: String) {
         _birthDate.value = newBirthDate
     }*/
-    fun onEmailChange(newEmail: String) { _email.value = newEmail }
-    fun onPhoneNumberChange(phoneNumber: String) { _phoneNumber.value = phoneNumber }
+    fun validateEmailChange(newEmail: String)  {
+        // 1. Verificar si está vacío
+        if (newEmail.isBlank()) {
+            _emailFieldState.value = _emailFieldState.value.copy(
+                text = newEmail,
+                isError = true,
+                errorMessage = "El correo no puede estar vacío"
+            )
+            return
+        }
+
+        // 2. Verificar formato usando Patterns de Android
+        if (!emailRegex.matches(newEmail)) {
+            _emailFieldState.value = _emailFieldState.value.copy(
+                text = newEmail,
+                isError = true,
+                errorMessage = "Formato de correo inválido"
+            )
+            return
+        }
+
+        // 3. Si todo está bien, actualizamos el estado del campo sin error
+        _emailFieldState.value = _emailFieldState.value.copy(
+            text = newEmail,
+            isError = false,
+            errorMessage = null
+        )
+    }
+
+    fun validPhoneNumberChange(phoneNumber: String) {
+        _phoneNumber.value = _phoneNumber.value.copy(
+            text = phoneNumber,
+            isError = false,
+            errorMessage = null
+        )
+    }
 
     fun onPasswordChange(newPassword: String) {
         val validatePassword = _password.value.second
@@ -275,14 +310,14 @@ class RegisterViewModel: ViewModel() {
             icon = emailIcon,
             length = 50,
             fieldState = email,
-            onValueChanged = ::onEmailChange
+            onValueChanged = ::validateEmailChange
         ),
         RegisterData.Text(
             title = Res.string.register_phone_number,
             icon = phoneNumberIcon,
             length = 20,
             fieldState = phoneNumber,
-            onValueChanged = ::onPhoneNumberChange
+            onValueChanged = ::validPhoneNumberChange
         ),
         RegisterData.Auth(
             title = Res.string.register_password,

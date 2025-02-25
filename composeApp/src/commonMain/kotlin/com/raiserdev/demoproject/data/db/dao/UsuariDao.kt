@@ -7,7 +7,6 @@ import com.raiserdev.demoproject.data.db.model.Usuario
 fun ProjectDatabase.setUsuario(usuario: Usuario): Boolean {
     return try {
         userQueries.insertUsuario(
-            id = usuario.id,
             username = usuario.userName ?: throw IllegalArgumentException("El nombre de usuario no puede ser nulo"),
             user_fathers_name = usuario.userFathersName ?: throw IllegalArgumentException("El nombre del padre no puede ser nulo"),
             user_mothers_name = usuario.userMothersName ?: throw IllegalArgumentException("El nombre de la madre no puede ser nulo"),

@@ -21,9 +21,9 @@ WHERE id = ?;
 
 insertUsuario:
 INSERT OR REPLACE INTO usuarios(
-    id, username, user_fathers_name,user_mothers_name, birth_date,email, password, nickname, numero_telefonico, fecha_creacion, fecha_actualizacion
+     username, user_fathers_name,user_mothers_name, birth_date,email, password, nickname, numero_telefonico, fecha_creacion, fecha_actualizacion
 ) VALUES (
-    ?, ?, ?,?,?,?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+    ?, ?,?,?,?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 );
 
 deleteUsuario:

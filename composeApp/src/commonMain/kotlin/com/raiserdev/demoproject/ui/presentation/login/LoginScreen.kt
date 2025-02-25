@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -29,6 +31,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -89,6 +93,8 @@ fun BodyView(
     onLoginSuccess: () -> Unit,
     onRegisterClick: () -> Unit,
 ) {
+    val focusManager = LocalFocusManager.current
+
     Column(
         modifier = Modifier.fillMaxSize(0.9f),
         verticalArrangement = Arrangement.Center,
@@ -110,6 +116,15 @@ fun BodyView(
             },
             onValueChange = { loginVM.onUsernameChange(it) },
             label = { Text("Username:") },
+            maxLines = 1,
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    // Acción cuando se presiona "Done"
+                    focusManager.clearFocus() // Cierra el teclado
+                }
+            ),
             modifier = Modifier.fillMaxWidth(0.8f) // Campo de texto ocupa el 80% del ancho
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -123,6 +138,15 @@ fun BodyView(
             value = credentials.second,
             onValueChange = { loginVM.onPasswordChange(it) },
             label = { Text("Password:") },
+            maxLines = 1,
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    // Acción cuando se presiona "Done"
+                    focusManager.clearFocus() // Cierra el teclado
+                }
+            ),
             modifier = Modifier.fillMaxWidth(0.8f), // Campo de texto ocupa el 80% del ancho
             visualTransformation = if(!loginVM.onHidePassword()) PasswordVisualTransformation() else VisualTransformation.None,
             trailingIcon = {
