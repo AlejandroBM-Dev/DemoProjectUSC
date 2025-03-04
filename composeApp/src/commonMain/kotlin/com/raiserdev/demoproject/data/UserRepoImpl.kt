@@ -5,7 +5,7 @@ import com.raiserdev.demoproject.data.db.model.Usuario
 import com.raiserdev.demoproject.domain.NotasRepository
 
 class UserRepoImpl(
-    database: ProjectDatabase,
+    database: ProjectDatabase
 ): NotasRepository {
     private val userQueries = database.userQueries
 

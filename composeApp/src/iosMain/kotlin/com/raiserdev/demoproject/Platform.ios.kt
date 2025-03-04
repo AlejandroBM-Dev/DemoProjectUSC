@@ -1,5 +1,8 @@
 package com.raiserdev.demoproject
 
+import com.raiserdev.demoproject.data.DriverFactory
+import com.raiserdev.demoproject.di.appModule
+import org.koin.core.context.startKoin
 import platform.UIKit.UIDevice
 
 class IOSPlatform: Platform {

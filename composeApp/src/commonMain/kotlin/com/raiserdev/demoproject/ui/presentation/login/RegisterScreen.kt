@@ -47,6 +47,7 @@ import com.raiserdev.demoproject.data.domain.data.RegisterData
 import com.raiserdev.demoproject.ui.common.AppTopBar
 import com.raiserdev.demoproject.utils.showToast
 import com.raiserdev.demoproject.utils.transformation.DateTransformation
+import com.raiserdev.demoproject.utils.transformation.PhoneMexTransformation
 import demoprojectusc.composeapp.generated.resources.Res
 import demoprojectusc.composeapp.generated.resources.accept
 import demoprojectusc.composeapp.generated.resources.formatDate
@@ -114,6 +115,7 @@ fun bodyView(
         val modifierLazyColumn = Modifier.fillMaxSize(1f)
 
         items(dataRecord) { data ->
+            println("itemRecord: $dataRecord")
             when (data) {
                 is RegisterData.Text -> {
                     val fieldState by data.fieldState.collectAsState()
@@ -175,24 +177,25 @@ fun bodyView(
                     )
                 }
                 is RegisterData.Phone -> {
-                    val currentValue by data.currentValue.collectAsState()
+                    val fieldState by data.fieldState.collectAsState()
+                    println("fieldState: ${fieldState.text}")
                     OutlinedTextField(
-                        value = currentValue,
                         leadingIcon = {
                             Icon(
                                 imageVector = data.icon,
                                 contentDescription = "${stringResource(data.title)} input text."
                             )
                         },
-                        isError = currentValue.isNotEmpty(),
+                        isError = fieldState.isError,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Phone,
                             imeAction = ImeAction.Next
                         ),
-                        onValueChange = { input -> data.onValueChanged(input.filter { it.isDigit() }.take(8)) },
-                        label = { Text(text = "${stringResource(data.title)} ${stringResource(Res.string.formatDate)}") },
+                        value = fieldState.text,
+                        onValueChange = { input -> data.onValueChanged(input) },
+                        label = { Text(text = "${stringResource(data.title)}") },
                         modifier = modifierLazyColumn,
-                        visualTransformation = DateTransformation(),
+                        visualTransformation = PhoneMexTransformation(),
                         maxLines = 1
                     )
                 }

@@ -8,7 +8,10 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.SmartToy
 import androidx.compose.material.icons.filled.Smartphone
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.raiserdev.demoproject.data.db.model.Usuario
 import com.raiserdev.demoproject.data.domain.data.RegisterData
+import com.raiserdev.demoproject.domain.NotasRepository
 import com.raiserdev.demoproject.ui.state.FieldState
 import demoprojectusc.composeapp.generated.resources.Res
 import demoprojectusc.composeapp.generated.resources.register_birth_date
@@ -19,14 +22,23 @@ import demoprojectusc.composeapp.generated.resources.register_name
 import demoprojectusc.composeapp.generated.resources.register_nick_name
 import demoprojectusc.composeapp.generated.resources.register_password
 import demoprojectusc.composeapp.generated.resources.register_phone_number
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope.coroutineContext
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.coroutines.coroutineContext
 
-class RegisterViewModel: ViewModel() {
+class RegisterViewModel(
+    private val repository: NotasRepository
+): ViewModel() {
 
     companion object {
         private const val MAX_DATE_LENGTH = 8
@@ -34,6 +46,7 @@ class RegisterViewModel: ViewModel() {
         private val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z0-9]+$".toRegex()
 
     }
+
     private val nameIcon = Icons.Default.Face
     private val nickNameIcon = Icons.Default.SmartToy
     private val calendarIcon = Icons.Default.Event
@@ -51,12 +64,7 @@ class RegisterViewModel: ViewModel() {
     private val _phoneFieldState = MutableStateFlow(FieldState())
 
     private val _emailFieldState = MutableStateFlow(FieldState())
-    private val _birthDate = MutableStateFlow(FieldState())
-    private val _phoneNumber = MutableStateFlow(FieldState())
     private val _password = MutableStateFlow(Pair("",""))
-    private val _confirmPassword = MutableStateFlow("")
-
-    val nameFieldState: StateFlow<FieldState> = _nameFieldState
 
     val name: StateFlow<FieldState> get() = _nameFieldState
     val nickName: StateFlow<FieldState> get() = _nickNameFieldState
@@ -206,9 +214,6 @@ class RegisterViewModel: ViewModel() {
     }
 
 
-    /*fun onBirthDateChange(newBirthDate: String) {
-        _birthDate.value = newBirthDate
-    }*/
     fun validateEmailChange(newEmail: String)  {
         // 1. Verificar si está vacío
         if (newEmail.isBlank()) {
@@ -239,7 +244,8 @@ class RegisterViewModel: ViewModel() {
     }
 
     fun validPhoneNumberChange(phoneNumber: String) {
-        _phoneNumber.value = _phoneNumber.value.copy(
+        println("number_ $phoneNumber")
+        _phoneFieldState.value = _phoneFieldState.value.copy(
             text = phoneNumber,
             isError = false,
             errorMessage = null
@@ -312,7 +318,7 @@ class RegisterViewModel: ViewModel() {
             fieldState = email,
             onValueChanged = ::validateEmailChange
         ),
-        RegisterData.Text(
+        RegisterData.Phone(
             title = Res.string.register_phone_number,
             icon = phoneNumberIcon,
             length = 20,
@@ -376,8 +382,27 @@ class RegisterViewModel: ViewModel() {
             validateMothersLastNameText(motherLastName.value.text)
 
             isSucces.invoke(false)
+
         } else {
-            isSucces.invoke(true)
+            viewModelScope.launch {
+                repository.addUser(
+                    Usuario(
+                        id = 0,
+                        nickname = nickName.value.text,
+                        userName = name.value.text,
+                        userFathersName = fatherLastName.value.text,
+                        userMothersName = motherLastName.value.text,
+                        birthDate = birthDate.value.text,
+                        email = email.value.text,
+                        numeroTelefonico = phoneNumber.value.text,
+                        fechaCreacion = "",
+                        fechaActualizacion = "",
+                        password = password.value.first
+                    )
+                )
+
+                isSucces.invoke(true)
+            }
         }
 
     }

@@ -6,6 +6,9 @@ import com.raiserdev.demoproject.ProjectDatabase
 
 actual class DriverFactory {
     actual fun createDriver(): SqlDriver {
-        return NativeSqliteDriver(ProjectDatabase.Schema, "ProjectDatabase.db")
+        return NativeSqliteDriver(
+            schema = ProjectDatabase.Schema,
+            name = "ProjectDatabase.db"
+        )
     }
 }

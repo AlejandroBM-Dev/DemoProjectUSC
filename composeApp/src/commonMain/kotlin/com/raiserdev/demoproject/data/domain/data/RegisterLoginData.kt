@@ -2,7 +2,6 @@ package com.raiserdev.demoproject.data.domain.data
 
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.raiserdev.demoproject.ui.state.FieldState
-import demoprojectusc.composeapp.generated.resources.Res
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.StringResource
 
@@ -36,10 +35,10 @@ sealed class RegisterData {
         override val title: StringResource,
         override val icon: ImageVector,
         override val length: Int,
-        val currentValue: StateFlow<String>,
+        val fieldState: StateFlow<FieldState>,
         override val onValueChanged: (String) -> Unit
     ) : RegisterData() {
-        override val type: DataType = DataType.NUMERIC
+        override val type: DataType = DataType.STRING
     }
 
     // Hexadecimal data

@@ -1,4 +1,3 @@
-import org.gradle.declarative.dsl.schema.FqName.Empty.packageName
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -68,6 +67,7 @@ kotlin {
 
         iosMain.dependencies {
             implementation(libs.native.driver)
+            implementation(libs.koin.core)
         }
 
         commonMain.dependencies {
