@@ -37,6 +37,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.raiserdev.demoproject.utils.showToast
 import demoprojectusc.composeapp.generated.resources.Res
 import demoprojectusc.composeapp.generated.resources.login_title
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -168,7 +169,16 @@ fun BodyView(
                 }})*/
         Spacer(modifier = Modifier.height(8.dp))
         Button(
-            onClick = onLoginSuccess,
+            onClick = {
+                loginVM.onLogin(
+                    onSuccess = {
+                        onLoginSuccess.invoke()
+                    },
+                    onError = { message ->
+                        showToast(message)
+                    }
+                )
+            },
             modifier = Modifier.fillMaxWidth(0.8f) // Botón ocupa el 80% del ancho
         ) {
             Text(

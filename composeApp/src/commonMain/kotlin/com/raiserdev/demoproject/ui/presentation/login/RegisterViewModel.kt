@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raiserdev.demoproject.data.db.model.Usuario
 import com.raiserdev.demoproject.data.domain.data.RegisterData
-import com.raiserdev.demoproject.domain.NotasRepository
+import com.raiserdev.demoproject.domain.UserRepository
 import com.raiserdev.demoproject.ui.state.FieldState
 import demoprojectusc.composeapp.generated.resources.Res
 import demoprojectusc.composeapp.generated.resources.register_birth_date
@@ -22,29 +22,22 @@ import demoprojectusc.composeapp.generated.resources.register_name
 import demoprojectusc.composeapp.generated.resources.register_nick_name
 import demoprojectusc.composeapp.generated.resources.register_password
 import demoprojectusc.composeapp.generated.resources.register_phone_number
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope.coroutineContext
-import kotlinx.coroutines.IO
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import kotlin.coroutines.coroutineContext
 
 class RegisterViewModel(
-    private val repository: NotasRepository
+    private val repository: UserRepository
 ): ViewModel() {
 
     companion object {
         private const val MAX_DATE_LENGTH = 8
         private const val MAX_VALIDATE_TEXT = 3
         private val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z0-9]+$".toRegex()
-
     }
 
     private val nameIcon = Icons.Default.Face
@@ -215,7 +208,6 @@ class RegisterViewModel(
 
 
     fun validateEmailChange(newEmail: String)  {
-        // 1. Verificar si está vacío
         if (newEmail.isBlank()) {
             _emailFieldState.value = _emailFieldState.value.copy(
                 text = newEmail,
@@ -225,7 +217,6 @@ class RegisterViewModel(
             return
         }
 
-        // 2. Verificar formato usando Patterns de Android
         if (!emailRegex.matches(newEmail)) {
             _emailFieldState.value = _emailFieldState.value.copy(
                 text = newEmail,
@@ -244,12 +235,28 @@ class RegisterViewModel(
     }
 
     fun validPhoneNumberChange(phoneNumber: String) {
-        println("number_ $phoneNumber")
+        if (phoneNumber.isBlank()) {
+            _phoneFieldState.value = _phoneFieldState.value.copy(
+                text = phoneNumber,
+                isError = true,
+                errorMessage = "El número de teléfono no puede estar vacío"
+            )
+            return
+        }
+        if (phoneNumber.length < 10) {
+            _phoneFieldState.value = _phoneFieldState.value.copy(
+                text = phoneNumber,
+                isError = true,
+                errorMessage = "El número de teléfono debe tener al menos 10 dígitos"
+            )
+            return
+        }
         _phoneFieldState.value = _phoneFieldState.value.copy(
             text = phoneNumber,
             isError = false,
             errorMessage = null
         )
+
     }
 
     fun onPasswordChange(newPassword: String) {
@@ -259,20 +266,6 @@ class RegisterViewModel(
     fun onSecondPasswordChange(validatePassword: String) {
         val newPassword = _password.value.first
         _password.value = Pair(newPassword,validatePassword)
-    }
-
-    fun showError(
-        dateString: String,
-        onShowError: (Boolean) -> Unit
-    ) {
-        if (dateString.length == MAX_DATE_LENGTH) {
-            val date = parseDdMmYyyy(birthDate.value.text)
-            if (date == null) {
-                onShowError.invoke(true)
-            } else {
-                onShowError.invoke(false)
-            }
-        }
     }
 
     private val _fields = listOf(
@@ -374,7 +367,9 @@ class RegisterViewModel(
             (nickName.value.isError || nickName.value.text.isEmpty()) ||
             (name.value.isError || name.value.text.isEmpty()) ||
             (fatherLastName.value.isError || fatherLastName.value.text.isEmpty()) ||
-            (motherLastName.value.isError || motherLastName.value.text.isEmpty())
+            (motherLastName.value.isError || motherLastName.value.text.isEmpty()) ||
+            (phoneNumber.value.isError || phoneNumber.value.text.isEmpty()) ||
+            (password.value.first.isEmpty() || password.value.second.isEmpty() || password.value.first != password.value.second)
         ) {
             validateNameText(name.value.text)
             validateNickNameText(nickName.value.text)

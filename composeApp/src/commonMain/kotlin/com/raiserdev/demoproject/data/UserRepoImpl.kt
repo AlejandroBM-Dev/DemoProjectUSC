@@ -1,12 +1,14 @@
 package com.raiserdev.demoproject.data
 
 import com.raiserdev.demoproject.ProjectDatabase
+import com.raiserdev.demoproject.data.db.model.LoginResult
 import com.raiserdev.demoproject.data.db.model.Usuario
-import com.raiserdev.demoproject.domain.NotasRepository
+import com.raiserdev.demoproject.domain.UserRepository
+import org.koin.viewmodel.resolveViewModel
 
 class UserRepoImpl(
     database: ProjectDatabase
-): NotasRepository {
+): UserRepository  {
     private val userQueries = database.userQueries
 
     override suspend fun addUser(usuario: Usuario) {
@@ -68,7 +70,41 @@ class UserRepoImpl(
         }
     }
 
-    override suspend fun login(email: String, password: String): Usuario? {
-        TODO("Not yet implemented")
+    override suspend fun existsByEmail(email: String): Boolean {
+        return userQueries.transactionWithResult {
+            userQueries.existsByEmail(email).executeAsOne() == EXIST_ONLY_ONE
+        }
     }
+
+    override suspend fun existsByTelefono(telefono: String): Boolean {
+        return userQueries.transactionWithResult {
+            userQueries.existsByTelefono(telefono).executeAsOne() == EXIST_ONLY_ONE
+        }
+    }
+
+    override suspend fun validateUser(credential: String, password: String): LoginResult? {
+        return userQueries.transactionWithResult {
+            userQueries
+                .validateUser(
+                    credential = credential,
+                    password = password
+                )
+                .executeAsOneOrNull()
+                ?.let { result ->
+                    LoginResult(
+                        id = result.id,
+                        userName = result.username,
+                        nickname = result.nickname,
+                        email = result.email,
+                        numeroTelefonico = result.numero_telefonico
+                    )
+                }
+        }
+    }
+
+
+    companion object {
+        private const val EXIST_ONLY_ONE = 1L
+    }
+
 }

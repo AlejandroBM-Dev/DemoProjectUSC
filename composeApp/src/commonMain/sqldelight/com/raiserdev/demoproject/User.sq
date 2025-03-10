@@ -44,4 +44,27 @@ SET
     fecha_actualizacion = CURRENT_TIMESTAMP
 WHERE id = :id;
 
+-- START // Aqui validamos el login.... ->
+-- Consulta para verificar si existe un email
+existsByEmail:
+SELECT CASE
+    WHEN EXISTS(SELECT 1 FROM usuarios WHERE email = :email)
+    THEN 1
+    ELSE 0
+END AS isEmailExists;
 
+-- Consulta para verificar si ese email coincide con un teléfono
+existsByTelefono:
+SELECT CASE
+      WHEN EXISTS(SELECT 1 FROM usuarios WHERE numero_telefonico = :phone)
+        THEN 1
+        ELSE 0
+END AS isPhoneExists;
+
+-- Consulta para obtener el nickname si coincide email, teléfono y password
+validateUser:
+SELECT id, username, nickname, email, numero_telefonico
+FROM usuarios
+WHERE password = :password
+  AND (:credential = email OR :credential = numero_telefonico);
+-- END //
