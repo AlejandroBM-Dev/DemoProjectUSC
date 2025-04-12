@@ -14,7 +14,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppTopBar(
+fun NotesTopAppBar(
     title: String,
     onBack: () -> Unit,
     onSettingsClick: () -> Unit

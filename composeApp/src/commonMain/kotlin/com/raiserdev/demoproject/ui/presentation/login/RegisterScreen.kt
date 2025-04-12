@@ -44,7 +44,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.raiserdev.demoproject.data.domain.data.RegisterData
-import com.raiserdev.demoproject.ui.common.AppTopBar
+import com.raiserdev.demoproject.ui.common.NotesTopAppBar
 import com.raiserdev.demoproject.utils.showToast
 import com.raiserdev.demoproject.utils.transformation.DateTransformation
 import com.raiserdev.demoproject.utils.transformation.PhoneMexTransformation
@@ -67,7 +67,7 @@ fun RegisterScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            AppTopBar(
+            NotesTopAppBar(
                 title = stringResource(Res.string.register_title),
                 onBack = {
                     onBack()
@@ -270,7 +270,7 @@ fun bodyView(
                                 onDone = { focusManager.moveFocus(FocusDirection.Next) }
                             ),
                             onValueChange = { if (it.length <= data.length) registerViewModel.onSecondPasswordChange(it)},
-                            label = { Text(text = stringResource(data.title)) },
+                            label = { Text(text = "Repite tú ${stringResource(data.title)}") },
                             modifier = modifierLazyColumn,
                             maxLines = 1
                         )

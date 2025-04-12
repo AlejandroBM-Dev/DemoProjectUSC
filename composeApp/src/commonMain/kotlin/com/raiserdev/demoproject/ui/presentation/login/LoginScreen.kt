@@ -2,6 +2,7 @@ package com.raiserdev.demoproject.ui.presentation.login
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +15,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
+import androidx.compose.material.Checkbox
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -168,6 +170,18 @@ fun BodyView(
                     Icon(imageVector = if(showPassword) Icons.Filled.VisibilityOff else Icons.Filled.Visibility, contentDescription = "Show Password")
                 }})*/
         Spacer(modifier = Modifier.height(8.dp))
+        Row (
+            modifier = Modifier.fillMaxWidth(0.8f),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("Recordar")
+            Checkbox(
+                checked = false,
+                onCheckedChange = {  }
+            )
+        }
+        Spacer(modifier = Modifier.height(32.dp))
         Button(
             onClick = {
                 loginVM.onLogin(

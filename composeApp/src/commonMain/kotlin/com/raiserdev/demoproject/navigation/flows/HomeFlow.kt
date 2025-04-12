@@ -15,6 +15,9 @@ fun NavGraphBuilder.homeNavGraph(
         HomeScreen(
             onSettingsClick = {
                 showToast("Settings clicked")
+            },
+            onBack = {
+
             }
         )
     }

@@ -30,7 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.raiserdev.demoproject.ui.common.AppTopBar
+import com.raiserdev.demoproject.ui.common.NotesTopAppBar
 import demoprojectusc.composeapp.generated.resources.Res
 import demoprojectusc.composeapp.generated.resources.help_title
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -46,7 +46,7 @@ fun HelpScreen(onBack: () -> Unit) {
     Scaffold(
         modifier = Modifier.fillMaxSize().fillMaxSize(),
         topBar = {
-            AppTopBar(
+            NotesTopAppBar(
                 title = stringResource(Res.string.help_title),
                 onBack = onBack,
                 onSettingsClick = { Unit }
