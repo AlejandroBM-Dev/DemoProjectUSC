@@ -15,7 +15,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
-import androidx.compose.material.Checkbox
+import androidx.compose.material3.Checkbox
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -28,11 +28,13 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -104,6 +106,7 @@ fun BodyView(
     onRegisterClick: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
+    val rememberMe by loginVM.rememberMe.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxSize(0.9f),
@@ -184,8 +187,15 @@ fun BodyView(
         ) {
             Text("Recordar")
             Checkbox(
-                checked = loginVM.rememberMe.value,
-                onCheckedChange = { loginVM.onRememberMe() }
+                colors = CheckboxDefaults.colors(
+                    checkedColor = MaterialTheme.colors.primary, // Color cuando está activado
+                    uncheckedColor = Color.Gray,                      // Color cuando está desactivado
+                    checkmarkColor = Color.White                     // Color de la palomita
+                ),
+                checked = rememberMe,
+                onCheckedChange = {
+                    loginVM.onRememberMe(it)
+                }
             )
         }
         Spacer(modifier = Modifier.height(32.dp))

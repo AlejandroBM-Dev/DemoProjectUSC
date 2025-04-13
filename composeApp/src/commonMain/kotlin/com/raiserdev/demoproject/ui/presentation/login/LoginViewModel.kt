@@ -42,8 +42,8 @@ class LoginViewModel(
        return showPassword.value
     }
 
-    fun onRememberMe(): Boolean {
-        _rememberMe.value = !_rememberMe.value
+    fun onRememberMe(check: Boolean): Boolean {
+        _rememberMe.value = check
         return rememberMe.value
     }
     fun onLogin(
@@ -67,7 +67,9 @@ class LoginViewModel(
                 println("userLogin: $userLogin")
                 if (userLogin != null) {
                     //Solo hacer el update si la checkBox de rememberMe se encuentra activada.
-                    repository.updateRecordarUsuario(userLogin.id)
+                    if (rememberMe.value) {
+                        repository.updateRecordarUsuario(userLogin.id)
+                    }
                     onSuccess.invoke()
                 } else {
                     onError.invoke("El password no es correcto.")

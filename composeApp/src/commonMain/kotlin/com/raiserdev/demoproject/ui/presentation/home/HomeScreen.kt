@@ -113,7 +113,6 @@ fun HomeScreen(
                 onCloseSession.invoke()
             },
         )
-
     }
 }
 
