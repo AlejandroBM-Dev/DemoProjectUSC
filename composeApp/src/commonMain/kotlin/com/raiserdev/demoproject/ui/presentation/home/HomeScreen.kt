@@ -20,12 +20,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.raiserdev.demoproject.ui.common.NotesBottomAppBar
+import com.raiserdev.demoproject.ui.common.NotesDialogApp
 import com.raiserdev.demoproject.ui.common.NotesTopAppBar
 import com.raiserdev.demoproject.utils.showToast
 import org.koin.compose.viewmodel.koinViewModel
@@ -35,16 +40,19 @@ val cardList: MutableList<CardData> = mutableListOf()
 @Composable
 fun HomeScreen(
     onSettingsClick: () -> Unit,
-    onBack: () -> Unit,
+    onCloseSession: () -> Unit,
 ) {
     val homeViewModel = koinViewModel<HomeViewModel>()
+    var showCloseDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             NotesTopAppBar(
                 title = "HomeScreen",
-                onBack = {},
+                onBack = {
+                    showCloseDialog = !showCloseDialog
+                },
                 onSettingsClick = {},
             )
         },
@@ -85,6 +93,28 @@ fun HomeScreen(
         }
     }
 
+    if (showCloseDialog) {
+
+        NotesDialogApp(
+            title = "Cerrar sesión",
+            message = "¿Deseas cerrar tú sesión actual?",
+            showPositiveButton = true,
+            showNegativeButton = true,
+            onDismissRequest = {
+                showCloseDialog = !showCloseDialog
+            },
+            onNegativeClick = {
+                showToast("No deseo sesión")
+                showCloseDialog = !showCloseDialog
+            },
+            onPositiveClick = {
+                showToast("Cerrar sesión")
+                homeViewModel.closeApp()
+                onCloseSession.invoke()
+            },
+        )
+
+    }
 }
 
 @Composable

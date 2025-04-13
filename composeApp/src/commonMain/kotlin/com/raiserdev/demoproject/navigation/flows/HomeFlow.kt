@@ -19,8 +19,12 @@ fun NavGraphBuilder.homeNavGraph(
             onSettingsClick = {
                 showToast("Settings clicked")
             },
-            onBack = {
-
+            onCloseSession = {
+                navController.navigate(Screen.Login.route) {
+                    popUpTo(0) { inclusive = true } // Esto limpia todo el backstack
+                    launchSingleTop = true // Evita múltiples instancias de Login
+                    restoreState = false
+                }
             }
         )
     }

@@ -79,3 +79,9 @@ WHERE id = :id;
 clearRecordarUsuario:
 UPDATE usuarios
 SET recordar_usuario_login = 0;
+
+getUsuarioRecordado:
+SELECT *
+FROM usuarios
+WHERE recordar_usuario_login = 1
+LIMIT 1;

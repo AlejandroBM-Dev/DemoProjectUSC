@@ -19,6 +19,6 @@ fun appModule(appDatabase: ProjectDatabase) = module {
     factory { HelpViewModel() }
     factory { LoginViewModel(get()) }
     factory { RegisterViewModel(get()) }
-    factory { HomeViewModel() }
+    factory { HomeViewModel(get()) }
     factory { SettingsViewModel() }
 }

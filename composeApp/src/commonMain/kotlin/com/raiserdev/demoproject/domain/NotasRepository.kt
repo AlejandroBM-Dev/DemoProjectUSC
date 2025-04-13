@@ -16,4 +16,5 @@ interface UserRepository {
 
     suspend fun updateRecordarUsuario(id: Long)
     suspend fun clearRecordarUsuario()
+    suspend fun getUsuarioRecordado(): Usuario?
 }

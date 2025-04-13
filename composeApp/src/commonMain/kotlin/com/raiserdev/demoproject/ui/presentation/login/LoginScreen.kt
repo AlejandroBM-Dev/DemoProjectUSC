@@ -53,6 +53,13 @@ fun LoginScreen (
     onHelpClick: () -> Unit,
 ){
     val credentials by loginVM.credentials.collectAsState()
+    loginVM.goToHome { go ->
+        if (go) {
+            onLoginSuccess.invoke()
+        } else {
+            println("sin usuario con rememberMe.")
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -177,8 +184,8 @@ fun BodyView(
         ) {
             Text("Recordar")
             Checkbox(
-                checked = false,
-                onCheckedChange = {  }
+                checked = loginVM.rememberMe.value,
+                onCheckedChange = { loginVM.onRememberMe() }
             )
         }
         Spacer(modifier = Modifier.height(32.dp))

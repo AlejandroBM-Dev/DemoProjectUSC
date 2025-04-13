@@ -48,7 +48,7 @@ fun HelpScreen(onBack: () -> Unit) {
         topBar = {
             NotesTopAppBar(
                 title = stringResource(Res.string.help_title),
-                onBack = onBack,
+                onBack = onBack ,
                 onSettingsClick = { Unit }
             )
         },

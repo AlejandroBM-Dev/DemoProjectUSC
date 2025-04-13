@@ -113,6 +113,29 @@ class UserRepoImpl(
             userQueries.clearRecordarUsuario()
         }
     }
+
+    override suspend fun getUsuarioRecordado(): Usuario? {
+        val user = userQueries.getUsuarioRecordado().executeAsOneOrNull()
+
+        return if (user == null) {
+            null
+        } else {
+            Usuario(
+                id = user.id,
+                nickname = user.nickname,
+                userName = user.username,
+                userFathersName = user.user_fathers_name,
+                userMothersName = user.user_mothers_name,
+                birthDate = user.birth_date,
+                email = user.email,
+                password = user.password,
+                numeroTelefonico = user.numero_telefonico,
+                fechaCreacion = user.fecha_creacion,
+                fechaActualizacion = user.fecha_actualizacion
+            )
+        }
+
+    }
     companion object {
         private const val EXIST_ONLY_ONE = 1L
     }

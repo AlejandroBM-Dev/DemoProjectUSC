@@ -14,9 +14,20 @@ class LoginViewModel(
 
     private val _credentials = MutableStateFlow(Pair("", ""))
     private val _showPassword = MutableStateFlow(false)
+    private val _rememberMe = MutableStateFlow(false)
 
     val credentials: StateFlow<Pair<String, String>> get() = _credentials
     val showPassword: StateFlow<Boolean> get() = _showPassword
+    val rememberMe: StateFlow<Boolean> get() = _rememberMe
+
+    fun goToHome(goToHome:(Boolean) -> Unit) {
+        viewModelScope.launch {
+            val rememberUser = repository.getUsuarioRecordado()
+            if (rememberUser != null) {
+                goToHome.invoke(true)
+            }
+        }
+    }
 
     fun onUsernameChange(newUsername: String) {
         _credentials.value = _credentials.value.copy(first = newUsername)
@@ -31,6 +42,10 @@ class LoginViewModel(
        return showPassword.value
     }
 
+    fun onRememberMe(): Boolean {
+        _rememberMe.value = !_rememberMe.value
+        return rememberMe.value
+    }
     fun onLogin(
         onSuccess: () -> Unit,
         onError:(message: String) -> Unit
@@ -51,6 +66,8 @@ class LoginViewModel(
                 )
                 println("userLogin: $userLogin")
                 if (userLogin != null) {
+                    //Solo hacer el update si la checkBox de rememberMe se encuentra activada.
+                    repository.updateRecordarUsuario(userLogin.id)
                     onSuccess.invoke()
                 } else {
                     onError.invoke("El password no es correcto.")
