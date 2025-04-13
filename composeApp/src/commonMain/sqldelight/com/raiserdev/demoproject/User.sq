@@ -8,6 +8,7 @@ CREATE TABLE usuarios (
     password TEXT NOT NULL,
     nickname TEXT,
     numero_telefonico TEXT,
+    recordar_usuario_login INTEGER DEFAULT 0, -- 0 = No recordar, 1 = Recordar
     fecha_creacion TEXT DEFAULT CURRENT_TIMESTAMP,
     fecha_actualizacion TEXT DEFAULT CURRENT_TIMESTAMP
 );
@@ -68,3 +69,13 @@ FROM usuarios
 WHERE password = :password
   AND (:credential = email OR :credential = numero_telefonico);
 -- END //
+
+updateRecordarUsuarioById:
+UPDATE usuarios
+SET recordar_usuario_login = 1,
+    fecha_actualizacion = CURRENT_TIMESTAMP
+WHERE id = :id;
+
+clearRecordarUsuario:
+UPDATE usuarios
+SET recordar_usuario_login = 0;

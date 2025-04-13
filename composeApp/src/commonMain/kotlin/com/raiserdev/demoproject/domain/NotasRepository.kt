@@ -14,4 +14,6 @@ interface UserRepository {
     suspend fun existsByTelefono(telefono: String): Boolean
     suspend fun validateUser(credential:String, password: String): LoginResult?
 
+    suspend fun updateRecordarUsuario(id: Long)
+    suspend fun clearRecordarUsuario()
 }

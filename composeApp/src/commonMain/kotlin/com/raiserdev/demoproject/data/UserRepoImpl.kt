@@ -102,7 +102,17 @@ class UserRepoImpl(
         }
     }
 
+    override suspend fun updateRecordarUsuario(id: Long) {
+        userQueries.transaction {
+            userQueries.updateRecordarUsuarioById(id)
+        }
+    }
 
+    override suspend fun clearRecordarUsuario() {
+        userQueries.transaction {
+            userQueries.clearRecordarUsuario()
+        }
+    }
     companion object {
         private const val EXIST_ONLY_ONE = 1L
     }
