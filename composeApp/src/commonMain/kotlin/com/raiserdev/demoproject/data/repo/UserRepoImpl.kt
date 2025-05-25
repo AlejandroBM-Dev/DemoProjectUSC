@@ -1,14 +1,13 @@
-package com.raiserdev.demoproject.data
+package com.raiserdev.demoproject.data.repo
 
 import com.raiserdev.demoproject.ProjectDatabase
 import com.raiserdev.demoproject.data.db.model.LoginResult
 import com.raiserdev.demoproject.data.db.model.Usuario
 import com.raiserdev.demoproject.domain.UserRepository
-import org.koin.viewmodel.resolveViewModel
 
 class UserRepoImpl(
     database: ProjectDatabase
-): UserRepository  {
+): UserRepository {
     private val userQueries = database.userQueries
 
     override suspend fun addUser(usuario: Usuario) {

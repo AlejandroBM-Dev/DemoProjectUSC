@@ -41,6 +41,7 @@ val cardList: MutableList<CardData> = mutableListOf()
 fun HomeScreen(
     onSettingsClick: () -> Unit,
     onCloseSession: () -> Unit,
+    onClickNote: (idNote:Int) -> Unit
 ) {
     val homeViewModel = koinViewModel<HomeViewModel>()
     var showCloseDialog by remember { mutableStateOf(false) }
@@ -57,7 +58,9 @@ fun HomeScreen(
             )
         },
         bottomBar = {
-            NotesBottomAppBar()
+            NotesBottomAppBar {
+                onClickNote.invoke(0)
+            }
         }
     ) { paddingValues ->
         Column(
@@ -86,7 +89,7 @@ fun HomeScreen(
             ) {
                 items(cardList.size) { cardItem ->
                     ItemCard(cardList[cardItem]) { idNote ->
-                        showToast("Edit -> ${cardList[idNote].title}")
+                        onClickNote.invoke(idNote)
                     }
                 }
             }

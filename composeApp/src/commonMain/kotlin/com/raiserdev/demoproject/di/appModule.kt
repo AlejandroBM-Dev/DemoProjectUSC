@@ -1,7 +1,9 @@
 package com.raiserdev.demoproject.di
 
 import com.raiserdev.demoproject.ProjectDatabase
-import com.raiserdev.demoproject.data.UserRepoImpl
+import com.raiserdev.demoproject.data.repo.NotaRepoImpl
+import com.raiserdev.demoproject.data.repo.UserRepoImpl
+import com.raiserdev.demoproject.domain.NotaRepository
 import com.raiserdev.demoproject.domain.UserRepository
 import com.raiserdev.demoproject.ui.presentation.home.HomeViewModel
 import com.raiserdev.demoproject.ui.presentation.home.SettingsViewModel
@@ -14,6 +16,7 @@ fun appModule(appDatabase: ProjectDatabase) = module {
 
     //REPOSITORY
     single<UserRepository> {UserRepoImpl(appDatabase)}
+    single<NotaRepository> {NotaRepoImpl(appDatabase)}
 
     //VIEW MODELS
     factory { HelpViewModel() }

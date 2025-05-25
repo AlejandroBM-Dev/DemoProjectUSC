@@ -16,7 +16,7 @@ import com.raiserdev.demoproject.utils.showToast
 
 @Composable
 fun NotesBottomAppBar(
-
+    onNoteClick: () -> Unit,
 ){
     BottomAppBar(
         actions = {
@@ -51,7 +51,9 @@ fun NotesBottomAppBar(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { showToast("Agregar nueva nota.") },
+                onClick = {
+                    onNoteClick.invoke()
+                          },
                 containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
                 elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
             ) {
