@@ -12,8 +12,8 @@ CREATE TABLE notas (
     estado TEXT CHECK(estado IN ('Terminada', 'Pendiente')) DEFAULT 'Pendiente',
     fecha_creacion TEXT DEFAULT CURRENT_TIMESTAMP,
     fecha_actualizacion TEXT DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id),
-    FOREIGN KEY (id_tipo) REFERENCES tipos_nota(id_tipo)
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
+    -- FOREIGN KEY (id_tipo) REFERENCES tipos_nota(id_tipo)
 );
 
 -- Tabla de tipos de nota (si es necesaria)

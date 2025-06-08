@@ -14,7 +14,7 @@ class NotaRepoImpl(
             noteQueries.insertNota(
                 id_usuario = nota.idUsuario.toLong(),
                 id_tipo = nota.idTipo?.toLong(),
-                titulo = nota.titulo,
+                titulo = nota.titulo ?: throw IllegalArgumentException("Title is required"),
                 descripcion = nota.descripcion,
                 fecha = nota.fecha ?: throw IllegalArgumentException("Fecha is required"),
                 ubicacion = nota.ubicacion,

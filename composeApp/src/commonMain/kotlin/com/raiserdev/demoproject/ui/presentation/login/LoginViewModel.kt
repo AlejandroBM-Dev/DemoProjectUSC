@@ -22,10 +22,12 @@ class LoginViewModel(
 
     fun goToHome(goToHome:(Boolean) -> Unit) {
         viewModelScope.launch {
-            val rememberUser = repository.getUsuarioRecordado()
-            if (rememberUser != null) {
+
+            // TODO() REVISAR ESTA LINEA, esta generando un crash
+            //val rememberUser = repository.getUsuarioRecordado()
+            /*if (rememberUser != null) {
                 goToHome.invoke(true)
-            }
+            }*/
         }
     }
 

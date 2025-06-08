@@ -2,9 +2,9 @@ package com.raiserdev.demoproject.data.db.model
 
 data class Nota(
     val idNota: Int = 0,  // 0 para insertar nueva nota (autoincrement)
-    val idUsuario: Int,
+    val idUsuario: Int = 0,
     val idTipo: Int? = null,
-    val titulo: String,
+    val titulo: String ?= null,
     val descripcion: String? = null,
     val fecha: String? = null,
     val ubicacion: String? = null,

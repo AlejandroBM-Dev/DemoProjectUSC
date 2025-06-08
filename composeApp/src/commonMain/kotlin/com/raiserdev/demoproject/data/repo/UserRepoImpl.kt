@@ -1,6 +1,7 @@
 package com.raiserdev.demoproject.data.repo
 
 import com.raiserdev.demoproject.ProjectDatabase
+import com.raiserdev.demoproject.UserQueries
 import com.raiserdev.demoproject.data.db.model.LoginResult
 import com.raiserdev.demoproject.data.db.model.Usuario
 import com.raiserdev.demoproject.domain.UserRepository
@@ -8,21 +9,30 @@ import com.raiserdev.demoproject.domain.UserRepository
 class UserRepoImpl(
     database: ProjectDatabase
 ): UserRepository {
-    private val userQueries = database.userQueries
+    private val userQueries: UserQueries = database.userQueries
 
     override suspend fun addUser(usuario: Usuario) {
-        userQueries.transaction {
-            userQueries.insertUsuario(
-                nickname = usuario.nickname,
-                username = usuario.userName ?: throw IllegalArgumentException("Username cannot be null"),
-                user_fathers_name = usuario.userFathersName ?: throw IllegalArgumentException("User's fathers name cannot be null"),
-                user_mothers_name = usuario.userMothersName ?: throw IllegalArgumentException("User's mothers name cannot be null"),
-                birth_date = usuario.birthDate ?: throw IllegalArgumentException("Birth date cannot be null"),
-                email = usuario.email ?: throw IllegalArgumentException("Email cannot be null"),
-                password = usuario.password ?: throw IllegalArgumentException("Password cannot be null"),
-                numero_telefonico = usuario.numeroTelefonico ?: throw IllegalArgumentException("Phone number cannot be null"),
-            )
+
+        userQueries.apply {
+            transaction {
+                try {
+                    insertUsuario(
+                        username = usuario.userName ?: throw IllegalArgumentException("Username cannot be null"),
+                        user_fathers_name = usuario.userFathersName ?: throw IllegalArgumentException("User's fathers name cannot be null"),
+                        user_mothers_name = usuario.userMothersName ?: throw IllegalArgumentException("User's mothers name cannot be null"),
+                        birth_date = usuario.birthDate ?: throw IllegalArgumentException("Birth date cannot be null"),
+                        email = usuario.email ?: throw IllegalArgumentException("Email cannot be null"),
+                        password = usuario.password ?: throw IllegalArgumentException("Password cannot be null"),
+                        nickname = usuario.nickname, // Ahora en el orden correcto
+                        numero_telefonico = usuario.numeroTelefonico ?: throw IllegalArgumentException("Phone number cannot be null"),
+                        // fecha_creacion y fecha_actualizacion no necesitan ser pasados, ya que usas CURRENT_TIMESTAMP
+                    )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
         }
+
     }
 
     override suspend fun getUserById(id: Long): Usuario? {
@@ -114,11 +124,12 @@ class UserRepoImpl(
     }
 
     override suspend fun getUsuarioRecordado(): Usuario? {
-        val user = userQueries.getUsuarioRecordado().executeAsOneOrNull()
+        val userExist = userQueries.getUsuarioRecordado().executeAsList()
 
-        return if (user == null) {
+        return if (userExist == null) {
             null
         } else {
+            val user = userExist[0]
             Usuario(
                 id = user.id,
                 nickname = user.nickname,

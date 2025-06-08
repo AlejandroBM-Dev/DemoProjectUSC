@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.kotlinxSerialization) apply false
 
     //SQLDelight
-    id("app.cash.sqldelight").version("2.0.2").apply(false)
+    id("app.cash.sqldelight").version("2.1.0").apply(false)
     alias(libs.plugins.ksp) apply false
 
 }

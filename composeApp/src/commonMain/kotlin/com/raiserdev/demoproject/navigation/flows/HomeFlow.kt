@@ -9,8 +9,10 @@ import androidx.navigation.compose.composable
 import com.raiserdev.demoproject.navigation.data.Screen
 import com.raiserdev.demoproject.ui.presentation.home.HomeScreen
 import com.raiserdev.demoproject.ui.presentation.home.NotaScreen
+import com.raiserdev.demoproject.ui.presentation.home.NotaViewModel
 import com.raiserdev.demoproject.ui.presentation.home.SettingsScreen
 import com.raiserdev.demoproject.utils.showToast
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.homeNavGraph(
@@ -36,8 +38,11 @@ fun NavGraphBuilder.homeNavGraph(
     composable(
         route = Screen.NoteDetail(0).route,
     ) {
+        val noteVM = koinViewModel<NotaViewModel>()
         val noteId = it.arguments?.getInt("noteId") ?: 0
+
         NotaScreen(
+            notaVM = noteVM,
             noteId = noteId,
             modifier = Modifier,
             onAddNoteClick = {

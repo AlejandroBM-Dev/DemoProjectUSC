@@ -1,13 +1,13 @@
 CREATE TABLE usuarios (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    username TEXT NOT NULL UNIQUE,
-    user_fathers_name TEXT NOT NULL UNIQUE,
-    user_mothers_name TEXT NOT NULL UNIQUE,
-    birth_date TEXT NOT NULL UNIQUE,
-    email TEXT NOT NULL UNIQUE,
+    username TEXT NOT NULL UNIQUE,          -- Asumiendo que el username SÍ debe ser único
+    user_fathers_name TEXT NOT NULL,       -- NO UNIQUE - Múltiples usuarios pueden tener padres con el mismo nombre
+    user_mothers_name TEXT NOT NULL,       -- NO UNIQUE - Múltiples usuarios pueden tener madres con el mismo nombre
+    birth_date TEXT NOT NULL,              -- NO UNIQUE - Múltiples usuarios pueden nacer el mismo día
+    email TEXT NOT NULL UNIQUE,            -- SÍ UNIQUE - El email es un identificador único
     password TEXT NOT NULL,
-    nickname TEXT,
-    numero_telefonico TEXT,
+    nickname TEXT,                         -- Opcional, puede ser nulo
+    numero_telefonico TEXT UNIQUE,         -- Sugiero que el número de teléfono sea ÚNICO si se usa para login/identificación
     recordar_usuario_login INTEGER DEFAULT 0, -- 0 = No recordar, 1 = Recordar
     fecha_creacion TEXT DEFAULT CURRENT_TIMESTAMP,
     fecha_actualizacion TEXT DEFAULT CURRENT_TIMESTAMP
@@ -21,10 +21,10 @@ SELECT * FROM usuarios
 WHERE id = ?;
 
 insertUsuario:
-INSERT OR REPLACE INTO usuarios(
-     username, user_fathers_name,user_mothers_name, birth_date,email, password, nickname, numero_telefonico, fecha_creacion, fecha_actualizacion
+INSERT INTO usuarios(
+     username, user_fathers_name, user_mothers_name, birth_date, email, password, nickname, numero_telefonico, fecha_creacion, fecha_actualizacion
 ) VALUES (
-    ?, ?,?,?,?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+    ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 );
 
 deleteUsuario:
@@ -33,11 +33,11 @@ WHERE id = ?;
 
 updateUsuario:
 UPDATE usuarios
-SET 
+SET
     username = :username,
-    user_fathers_name =:user_fathers_name,
-    user_mothers_name =:user_mothers_name,
-    birth_date =:birth_date,
+    user_fathers_name = :user_fathers_name,
+    user_mothers_name = :user_mothers_name,
+    birth_date = :birth_date,
     email = :email,
     password = :password,
     nickname = :nickname,

@@ -201,3 +201,16 @@ compose.desktop {
         }
     }
 }
+
+afterEvaluate {
+    // Solución para la dependencia KSP faltante
+    tasks.named("kspDebugKotlinAndroid") {
+        dependsOn("kspCommonMainKotlinMetadata")
+    }
+
+    // Opcional: Si esperas usar KSP también en tus builds de release para Android,
+    // es buena práctica añadir esta dependencia también.
+    tasks.named("kspReleaseKotlinAndroid") {
+        dependsOn("kspCommonMainKotlinMetadata")
+    }
+}

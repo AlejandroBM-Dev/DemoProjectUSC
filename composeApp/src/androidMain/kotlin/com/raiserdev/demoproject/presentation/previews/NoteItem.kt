@@ -43,20 +43,5 @@ fun PreviewNoteItem() {
     }
 }
 
-@Preview(
-    showSystemUi = true
-)
-@Composable
-fun PreviewNoteScreen() {
-    Scaffold { paddingValues ->
-        NotaScreen(
-            1,
-            modifier = Modifier.padding(paddingValues),
-            {},
-            {},
-            {}
-        )
-    }
 
-}
 

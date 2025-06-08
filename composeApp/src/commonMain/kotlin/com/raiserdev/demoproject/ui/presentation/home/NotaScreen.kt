@@ -33,19 +33,24 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun NotaScreen(
+    notaVM: NotaViewModel,
     noteId: Int = 0,
     modifier: Modifier = Modifier,
     onAddNoteClick: () -> Unit,
     onEditNoteClick: (noteId: Int) -> Unit,
     onCloseNoteClick: () -> Unit,
 ) {
+
     Column(
         modifier = modifier
             .padding(8.dp)
             .fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Head()
+        Head(
+            title = notaVM.notes.value.titulo ?: "Nueva nota.",
+            date = notaVM.notes.value.fecha ?: "Created ##-##-####"
+        )
         Body()
         Foot(
             onCanceleClick = onCloseNoteClick,
@@ -56,7 +61,10 @@ fun NotaScreen(
 }
 
 @Composable
-fun Head() {
+fun Head(
+    title: String = "Nueva nota.",
+    date: String = "Created ##-##-####"
+) {
     val modifier = Modifier.fillMaxWidth()
     Text(
         text = "NotaScreen",
