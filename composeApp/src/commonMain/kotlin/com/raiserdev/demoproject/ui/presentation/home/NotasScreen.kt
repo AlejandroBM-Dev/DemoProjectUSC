@@ -3,6 +3,7 @@ package com.raiserdev.demoproject.ui.presentation.home
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -26,8 +27,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.raiserdev.demoproject.data.db.repository.fakeNotasRepo
 import com.raiserdev.demoproject.ui.common.NotesTopAppBar
 import com.raiserdev.demoproject.utils.showToast
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun NotasScreen(
@@ -55,6 +58,7 @@ fun NotasScreen(
             )
         },
         bottomBar = { NotasBottomAppBar(
+            notasVM = notasVM,
             onBackClick
         ) },
     ) { paddingValues ->
@@ -86,7 +90,7 @@ fun NotasHead(
             notaVM.onTitleNoteChange(it)
                         },
         label = { Text("Agrega un titulo.") },
-        modifier = modifier.padding(10.dp)
+        modifier = modifier.padding(10.dp).fillMaxWidth()
     )
 }
 
@@ -101,12 +105,13 @@ fun NotasBody(
         value = contentNote.value,
         onValueChange = { notaVM.onContentNoteChange(it) },
         label = { Text("Título de la nota") },
-        modifier = modifier.scrollable(state = scroll, orientation = Orientation.Vertical)
+        modifier = modifier.scrollable(state = scroll, orientation = Orientation.Vertical).fillMaxHeight()
     )
 }
 
 @Composable
 fun NotasBottomAppBar(
+    notasVM: NotasViewModel,
     onBack: () -> Unit
 ) {
     BottomAppBar(
@@ -131,8 +136,11 @@ fun NotasBottomAppBar(
             FloatingActionButton(
                 onClick = {
                     showToast("test saved.")
-                    onBack.invoke()
-                          },
+                    notasVM.saveNote { success ->
+                        if (success) {
+                            onBack.invoke()
+                        }
+                    } },
                 containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
                 elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
             ) {
@@ -142,3 +150,17 @@ fun NotasBottomAppBar(
     )
 
 }
+
+/*@Preview
+@Composable
+fun NotasScreenPreview() {
+    val previewVM = NotasViewModel(fakeNotasRepo).apply {
+        onTitleNoteChange("Preview title")
+        onContentNoteChange("Preview content")
+    }
+    NotasScreen(
+        notasVM = previewVM,
+        onBackClick = {},
+        onSettingsClick = {}
+    )
+}*/

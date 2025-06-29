@@ -107,7 +107,7 @@ fun BodyView(
     val focusManager = LocalFocusManager.current
 
     Column(
-        modifier = Modifier.fillMaxSize(0.9f),
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

@@ -20,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,16 +31,18 @@ import com.raiserdev.demoproject.ui.common.NotesTopAppBar
 import com.raiserdev.demoproject.utils.showToast
 import org.koin.compose.viewmodel.koinViewModel
 
-val cardList: MutableList<CardData> = mutableListOf()
-
 @Composable
 fun HomeScreen(
     homeVM: HomeViewModel = koinViewModel(),
     onSettingsClick: () -> Unit,
     onBack: () -> Unit,
-    onAddNote: () -> Unit
+    onAddNote: () -> Unit,
+    onShowNote: (idNote: Int) -> Unit
 ) {
+    homeVM.showAllNotes()
 
+    val showAllNotes = homeVM.listNotes.collectAsState()
+    println("showAllNotes: ${showAllNotes.value}")
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -66,28 +69,27 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
+
             Text(
                 "NOTAS",
                 style = MaterialTheme.typography.h3
             )
 
-            cardList
-                .add(
-                    index = 0,
-                    element = CardData(0,"Primera Nota", "Aquí veremos un poco de texto...", "10/02/2010", Color.Red)
-                )
-            cardList
-                .add(
-                    index = 1,
-                    element = CardData(1,"Segunda Nota", "Aquí veremos un poco de texto...", "10/02/2010", Color.Red)
-                )
-
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(minSize = 128.dp)
             ) {
-                items(cardList.size) { cardItem ->
-                    ItemCard(cardList[cardItem]) { idNote ->
-                        showToast("Edit -> ${cardList[idNote].title}")
+                items(showAllNotes.value.size) { index ->
+
+                    ItemCard(
+                        cardData = CardData(
+                            idNote = showAllNotes.value[index].id.toInt(),
+                            title = showAllNotes.value[index].titulo,
+                            textCard = showAllNotes.value[index].contenido?.take(20).toString(),
+                            dateCreated = showAllNotes.value[index].fechaCreacion,
+                            backgroundColor = Color.Red,
+                        )
+                    ) {
+                        showToast("idNote: $it")
                     }
                 }
             }

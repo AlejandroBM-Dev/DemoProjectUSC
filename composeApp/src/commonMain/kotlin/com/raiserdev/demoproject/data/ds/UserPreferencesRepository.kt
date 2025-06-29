@@ -1,6 +1,7 @@
 package com.raiserdev.demoproject.data.ds
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.raiserdev.demoproject.data.ds.model.UserData
 import kotlinx.coroutines.flow.Flow
@@ -10,6 +11,7 @@ class UserPreferencesRepository(
     private val dataStore: PrefsDataStore
 ) {
     private object PreferencesKeys {
+        val USER_ID = longPreferencesKey("user_id")
         val USER_NAME = stringPreferencesKey("user_name")
         val USER_EMAIL = stringPreferencesKey("user_email")
         val IS_LOGGED_IN = booleanPreferencesKey("is_logged_in")
@@ -17,10 +19,19 @@ class UserPreferencesRepository(
 
     val userPrefData: Flow<UserData> = dataStore.data.map { preferences ->
         UserData(
+            userId = preferences[PreferencesKeys.USER_ID] ?: 0L,
             userName = preferences[PreferencesKeys.USER_NAME] ?: "",
             userEmail = preferences[PreferencesKeys.USER_EMAIL] ?: "",
             isLoggedIn = preferences[PreferencesKeys.IS_LOGGED_IN] ?: false
         )
+    }
+
+    suspend fun updateUserId(userId: Long) {
+        dataStore.updateData { preferences ->
+            preferences.toMutablePreferences().apply {
+                this[PreferencesKeys.USER_ID] = userId
+            }
+        }
     }
 
     suspend fun updateUserName(userName: String) {
@@ -51,6 +62,7 @@ class UserPreferencesRepository(
         return runCatching {
             dataStore.updateData { preferences ->
                 preferences.toMutablePreferences().apply {
+                    remove(PreferencesKeys.USER_ID)
                     remove(PreferencesKeys.USER_NAME)
                     remove(PreferencesKeys.USER_EMAIL)
                     remove(PreferencesKeys.IS_LOGGED_IN)

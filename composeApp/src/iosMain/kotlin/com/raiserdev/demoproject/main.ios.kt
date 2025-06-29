@@ -4,6 +4,7 @@ import androidx.compose.ui.window.ComposeUIViewController
 import com.raiserdev.demoproject.data.DriverFactory
 import com.raiserdev.demoproject.data.ds.dataStoreFileName
 import com.raiserdev.demoproject.di.appModule
+import com.raiserdev.demoproject.notas.NotasProjectDatabase
 import kotlinx.cinterop.ExperimentalForeignApi
 import org.koin.core.context.startKoin
 import platform.Foundation.NSFileManager
@@ -21,7 +22,7 @@ fun initKoin() {
     startKoin {
         modules(
             appModule(
-                appDatabase = ProjectDatabase.invoke(DriverFactory().createDriver()),
+                appDatabase = NotasProjectDatabase.invoke(DriverFactory().createDriver()),
                 producePath = { iosDataStorePath() })
         )
     }.koin

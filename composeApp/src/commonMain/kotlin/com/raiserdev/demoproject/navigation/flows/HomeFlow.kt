@@ -36,6 +36,9 @@ fun NavGraphBuilder.homeNavGraph(
             },
             onAddNote = {
                 navController.navigate(Screen.Notas.route)
+            },
+            onShowNote = {
+
             }
         )
     }

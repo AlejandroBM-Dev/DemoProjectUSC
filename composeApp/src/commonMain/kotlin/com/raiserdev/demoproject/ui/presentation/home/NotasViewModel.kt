@@ -1,13 +1,21 @@
 package com.raiserdev.demoproject.ui.presentation.home
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.raiserdev.demoproject.data.db.model.Nota
+import com.raiserdev.demoproject.data.ds.UserPreferencesRepository
+import com.raiserdev.demoproject.domain.NotasRepository
 import com.raiserdev.demoproject.utils.showToast
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
-class NotasViewModel: ViewModel() {
+class NotasViewModel(
+    private val noteRepository: NotasRepository,
+    private val userPreferencesRepository: UserPreferencesRepository
+): ViewModel() {
 
     private val _titleNote = MutableStateFlow("")
     val titleNote: StateFlow<String> get() = _titleNote
@@ -24,11 +32,40 @@ class NotasViewModel: ViewModel() {
         _contentNote.value = newContent
     }
 
-    fun saveNote() {
+    fun saveNote(onSucces: (Boolean) -> Unit) {
         if (titleNote.value.isNotEmpty() && contentNote.value.isNotEmpty()) {
-            showToast("Nota guardada con éxito.")
+            viewModelScope.launch {
+                val userPF = userPreferencesRepository.userPrefData.first()
+
+                val newNote = Nota(
+                    id = 0,
+                    titulo = titleNote.value,
+                    contenido = contentNote.value,
+                    usuarioId = userPF.userId,
+                    fechaCreacion = "",
+                    fechaActualizacion = ""
+                )
+
+                val insertedId = runCatching {
+                    noteRepository.insertNota(newNote)
+                }.getOrElse {
+                    showToast("Error al guardar la nota: ${it.message}")
+                    return@launch
+                }
+
+                if (insertedId > 0) {
+                    showToast("Nota guardada con éxito.")
+                    _titleNote.value = ""
+                    _contentNote.value = ""
+                    onSucces.invoke(true)
+                } else {
+                    showToast("No se pudo guardar la nota.")
+                    onSucces.invoke(false)
+                }
+            }
         } else {
             showToast("Completa todos los campos.")
+            onSucces.invoke(false)
         }
     }
 

@@ -76,8 +76,6 @@ kotlin {
             implementation(compose.material)
             implementation(compose.ui)
 
-            implementation(libs.androidx.constraintlayout)
-
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
 
@@ -135,8 +133,8 @@ kotlin {
 // en iOS recuerda agregar la bandera “Other Linker Flags.” Add -lsqlite3 -> tuto https://medium.com/@hunterfreas/sqldelight-setup-a-local-database-for-kmp-compose-ios-android-65f7e2b1e224
 sqldelight {
     databases {
-        create("ProjectDatabase") {
-            packageName.set("com.raiserdev.demoproject")
+        create("NotasProjectDatabase") {
+            packageName.set("com.raiserdev.demoproject.notas")
         }
     }
 }

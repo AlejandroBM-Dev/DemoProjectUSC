@@ -1,6 +1,5 @@
 package com.raiserdev.demoproject.domain
 
-import app.cash.sqldelight.Query
 import com.raiserdev.demoproject.data.db.model.LoginResult
 import com.raiserdev.demoproject.data.db.model.Usuario
 

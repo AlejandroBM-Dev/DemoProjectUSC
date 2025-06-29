@@ -1,11 +1,13 @@
 package com.raiserdev.demoproject.di
 
-import com.raiserdev.demoproject.ProjectDatabase
-import com.raiserdev.demoproject.data.UserRepoImpl
+import com.raiserdev.demoproject.data.db.repository.NotaRepoImpl
+import com.raiserdev.demoproject.data.db.repository.UserRepoImpl
 import com.raiserdev.demoproject.data.ds.PrefsDataStore
 import com.raiserdev.demoproject.data.ds.UserPreferencesRepository
 import com.raiserdev.demoproject.data.ds.createDataStore
+import com.raiserdev.demoproject.domain.NotasRepository
 import com.raiserdev.demoproject.domain.UserRepository
+import com.raiserdev.demoproject.notas.NotasProjectDatabase
 import com.raiserdev.demoproject.ui.presentation.home.HomeViewModel
 import com.raiserdev.demoproject.ui.presentation.home.NotasViewModel
 import com.raiserdev.demoproject.ui.presentation.home.SettingsViewModel
@@ -15,7 +17,7 @@ import com.raiserdev.demoproject.ui.presentation.login.RegisterViewModel
 import org.koin.dsl.module
 
 fun appModule(
-    appDatabase: ProjectDatabase,
+    appDatabase: NotasProjectDatabase,
     producePath: () -> String
 ) = module {
 
@@ -26,12 +28,13 @@ fun appModule(
 
     //REPOSITORY
     single<UserRepository> { UserRepoImpl(appDatabase) }
+    single<NotasRepository> { NotaRepoImpl(appDatabase) }
 
     //VIEW MODELS
     factory { HelpViewModel() }
     factory { LoginViewModel(get(), get()) }
     factory { RegisterViewModel(get()) }
-    factory { HomeViewModel(get()) }
-    factory { NotasViewModel() }
+    factory { HomeViewModel(get(), get()) }
+    factory { NotasViewModel(get(),get()) }
     factory { SettingsViewModel() }
 }

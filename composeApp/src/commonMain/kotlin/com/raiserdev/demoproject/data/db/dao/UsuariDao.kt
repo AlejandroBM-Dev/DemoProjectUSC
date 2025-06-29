@@ -1,10 +1,10 @@
 package com.raiserdev.demoproject.data.db.dao
 
-import com.raiserdev.demoproject.ProjectDatabase
 import com.raiserdev.demoproject.Usuarios
 import com.raiserdev.demoproject.data.db.model.Usuario
+import com.raiserdev.demoproject.notas.NotasProjectDatabase
 
-fun ProjectDatabase.setUsuario(usuario: Usuario): Boolean {
+fun NotasProjectDatabase.setUsuario(usuario: Usuario): Boolean {
     return try {
         userQueries.insertUsuario(
             username = usuario.userName ?: throw IllegalArgumentException("El nombre de usuario no puede ser nulo"),
@@ -26,7 +26,7 @@ fun ProjectDatabase.setUsuario(usuario: Usuario): Boolean {
     }
 }
 
-fun ProjectDatabase.getUsuarios(): Pair<Boolean, List<Usuario>> {
+fun NotasProjectDatabase.getUsuarios(): Pair<Boolean, List<Usuario>> {
     return try {
         val listUsuarios: List<Usuarios> = userQueries.getUsuarios().executeAsList()
         val mappedUsuarios = listUsuarios.map { user ->
@@ -52,7 +52,7 @@ fun ProjectDatabase.getUsuarios(): Pair<Boolean, List<Usuario>> {
     }
 }
 
-fun ProjectDatabase.getUsuarioById(id: Long): Pair<Boolean, Usuario?> {
+fun NotasProjectDatabase.getUsuarioById(id: Long): Pair<Boolean, Usuario?> {
     return try {
         val usuarioGenerado: Usuarios? = userQueries.getUsuarioById(id).executeAsOneOrNull()
         val usuario = usuarioGenerado?.let {

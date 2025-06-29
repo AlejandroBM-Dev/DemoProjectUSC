@@ -304,6 +304,15 @@ fun Foot(
     ) {
         Button(
             modifier = Modifier.fillMaxWidth(0.4f).weight(0.9f),
+            onClick = onHelpClick
+        ) {
+            Text(
+                stringResource(Res.string.help),
+            )
+        }
+        Spacer(modifier = Modifier.width(8.dp)) // Espaciado entre botones
+        Button(
+            modifier = Modifier.fillMaxWidth(0.4f).weight(0.9f),
             onClick = {
                 registerViewModel.setRegister { success ->
                     if (success) {
@@ -316,15 +325,6 @@ fun Foot(
         ) {
             Text(
                 stringResource(Res.string.accept),
-            )
-        }
-        Spacer(modifier = Modifier.width(8.dp)) // Espaciado entre botones
-        Button(
-            modifier = Modifier.fillMaxWidth(0.4f).weight(0.9f),
-            onClick = onHelpClick
-        ) {
-            Text(
-                stringResource(Res.string.help),
             )
         }
     }

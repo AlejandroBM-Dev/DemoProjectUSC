@@ -47,12 +47,11 @@ class LoginViewModel(
     }
 
 
-
     fun isLogged(onLogin: (Boolean) -> Unit) {
         viewModelScope.launch {
-            val isLogged = userPreferencesRepository.userPrefData.first()
-            println("isLogged: $isLogged")
-            onLogin.invoke(isLogged.isLoggedIn)
+            val userPf = userPreferencesRepository.userPrefData.first()
+            println("isLogged: $userPf")
+            onLogin.invoke(userPf.isLoggedIn)
         }
     }
 
@@ -75,9 +74,12 @@ class LoginViewModel(
                     credentials.value.second
                 )
                 if (userLogin != null) {
-                    userPreferencesRepository.updateUserName(userLogin.userName ?: "")
-                    userPreferencesRepository.updateEmail(userLogin.email ?: "")
-                    userPreferencesRepository.setLoggedIn(rememberCredentials.value)
+                    userPreferencesRepository.apply {
+                        updateUserId(userLogin.id)
+                        updateUserName(userLogin.userName ?: "")
+                        updateEmail(userLogin.email ?: "")
+                        setLoggedIn(rememberCredentials.value)
+                    }
                     //se valida el cambio de estado para isLoggedIn...
 
                     println("userLogin: $userLogin")

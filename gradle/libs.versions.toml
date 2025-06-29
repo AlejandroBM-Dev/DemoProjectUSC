@@ -3,11 +3,11 @@ agp = "8.5.2"
 android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
-androidDriver = "2.0.2"
-androidx-activityCompose = "1.10.0"
-androidx-appcompat = "1.7.0"
-androidx-constraintlayout = "2.2.0"
-androidx-core-ktx = "1.15.0"
+androidDriver = "2.1.0"
+androidx-activityCompose = "1.10.1"
+androidx-appcompat = "1.7.1"
+
+androidx-core-ktx = "1.16.0"
 androidx-espresso-core = "3.6.1"
 androidx-lifecycle = "2.8.4"
 androidx-material = "1.12.0"
@@ -29,9 +29,9 @@ materialIconsExtended = "1.7.7"
 materialIconsExtendedVersion = "1.7.3"
 navigation-compose = "2.8.0-alpha10"
 ksp = "2.1.0-1.0.29"
-toolsCore = "1.0.0-alpha10"
-material3Android = "1.3.1"
-foundationLayoutAndroid = "1.7.7"
+toolsCore = "1.0.0-alpha13"
+material3Android = "1.3.2"
+foundationLayoutAndroid = "1.8.3"
 
 [libraries]
 android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "androidDriver" }
@@ -50,7 +50,6 @@ androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidx-espresso-core" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
 androidx-material = { group = "com.google.android.material", name = "material", version.ref = "androidx-material" }
-androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }

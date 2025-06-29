@@ -1,0 +1,39 @@
+CREATE TABLE notas (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    titulo TEXT NOT NULL,
+    contenido TEXT,
+    usuario_id INTEGER NOT NULL,
+    fecha_creacion TEXT DEFAULT CURRENT_TIMESTAMP,
+    fecha_actualizacion TEXT DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+getNotas:
+SELECT * FROM notas;
+
+getNotasByUsuario:
+SELECT * FROM notas
+WHERE usuario_id = :usuarioId;
+
+getNotaById:
+SELECT * FROM notas
+WHERE id = :id;
+
+insertNota:
+INSERT INTO notas (
+    titulo, contenido, usuario_id, fecha_creacion, fecha_actualizacion
+) VALUES (
+    :titulo, :contenido, :usuario_id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+);
+
+updateNota:
+UPDATE notas
+SET
+    titulo = :titulo,
+    contenido = :contenido,
+    fecha_actualizacion = CURRENT_TIMESTAMP
+WHERE id = :id;
+
+deleteNota:
+DELETE FROM notas
+WHERE id = :id;
