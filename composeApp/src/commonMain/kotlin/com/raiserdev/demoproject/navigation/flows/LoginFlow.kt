@@ -22,13 +22,10 @@ fun NavGraphBuilder.loginNavGraph(
         LoginScreen(
             loginVM = loginVM,
             onLoginSuccess = onLoginSuccess,
-            onRegisterClick = {
-                navController.navigate(Screen.Register.route)
-            },
-            onHelpClick = {
-                navController.navigate(Screen.Help.route)
-            }
+            onRegisterClick = { navController.navigate(Screen.Register.route) },
+            onHelpClick = { navController.navigate(Screen.Help.route) }
         )
+
     }
 
     composable(Screen.Register.route) {

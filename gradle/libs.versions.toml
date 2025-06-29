@@ -15,6 +15,7 @@ androidx-test-junit = "1.2.1"
 coilSvg = "3.0.4"
 collection = "1.4.5"
 compose-multiplatform = "1.7.1"
+datastore = "1.1.7"
 junit = "4.13.2"
 kotlin = "2.1.0"
 kotlinx-coroutines = "1.10.1"
@@ -35,6 +36,8 @@ foundationLayoutAndroid = "1.7.7"
 [libraries]
 android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "androidDriver" }
 androidx-collection = { module = "androidx.collection:collection", version.ref = "collection" }
+androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilSvg" }
 coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coilSvg" }

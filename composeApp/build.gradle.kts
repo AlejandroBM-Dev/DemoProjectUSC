@@ -75,6 +75,9 @@ kotlin {
             implementation(compose.foundation)
             implementation(compose.material)
             implementation(compose.ui)
+
+            implementation(libs.androidx.constraintlayout)
+
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
 
@@ -89,6 +92,10 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             api(libs.koin.annotations)
 
+            // DataStore lib and Preferences DataStore library
+            implementation(libs.androidx.datastore)
+            implementation(libs.androidx.datastore.preferences)
+
             // DB sqldelight
             implementation(libs.coroutines.extensions)
 
@@ -101,8 +108,8 @@ kotlin {
 
             //DateTime
             implementation(libs.kotlinx.datetime)
-
         }
+
         desktopMain.dependencies {
             // implementation(compose.desktop.currentOs)
             // implementation("org.jetbrains.skiko:skiko-awt-runtime-linux-x64:0.7.69")

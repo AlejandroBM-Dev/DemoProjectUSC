@@ -14,7 +14,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             App(
                 null,
-                //DriverFactory().createDriver(),
                 true
             )
         }

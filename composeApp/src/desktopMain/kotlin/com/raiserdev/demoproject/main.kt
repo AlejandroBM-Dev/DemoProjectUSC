@@ -5,7 +5,6 @@ import androidx.compose.ui.window.application
 import com.raiserdev.demoproject.di.initKoin
 
 fun main() = application {
-    initKoin()
 
     Window(
         onCloseRequest = ::exitApplication,

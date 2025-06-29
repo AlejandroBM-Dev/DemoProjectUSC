@@ -2,14 +2,15 @@ package com.raiserdev.demoproject.data.db.model
 
 data class Usuario(
     val id: Long,
-    var userName: String?,
-    var userFathersName: String?,
-    var userMothersName: String?,
-    var birthDate: String?,
-    var email: String?,
-    var password: String?,
-    var nickname: String?,
-    var numeroTelefonico: String?,
-    var fechaCreacion: String?,
-    var fechaActualizacion: String?
+    val userName: String?,
+    val userFathersName: String?,
+    val userMothersName: String?,
+    val birthDate: String?,
+    val email: String?,
+    val password: String?,
+    val nickname: String?,
+    val numeroTelefonico: String?,
+    val fechaCreacion: String?,
+    val fechaActualizacion: String?,
+    val recordarUsuario: Boolean? = false,
 )

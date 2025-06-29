@@ -4,19 +4,30 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.raiserdev.demoproject.data.ds.PrefsDataStore
+import com.raiserdev.demoproject.data.ds.UserPreferencesRepository
 import com.raiserdev.demoproject.domain.UserRepository
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import org.koin.core.component.getScopeName
 
 class LoginViewModel(
-    private val repository: UserRepository
+    private val repository: UserRepository,
+    private val userPreferencesRepository: UserPreferencesRepository
 ): ViewModel() {
 
-    private val _credentials = MutableStateFlow(Pair("", ""))
-    private val _showPassword = MutableStateFlow(false)
 
-    val credentials: StateFlow<Pair<String, String>> get() = _credentials
-    val showPassword: StateFlow<Boolean> get() = _showPassword
+    private val _credentials = MutableStateFlow(Pair("", ""))
+    val credentials: StateFlow<Pair<String, String>> get() = _credentials.asStateFlow()
+
+    private val _showPassword = MutableStateFlow(false)
+    val showPassword: StateFlow<Boolean> get() = _showPassword.asStateFlow()
+
+    private val _rememberCredentials = MutableStateFlow(false)
+    val rememberCredentials: StateFlow<Boolean> get() = _rememberCredentials.asStateFlow()
+
+
 
     fun onUsernameChange(newUsername: String) {
         _credentials.value = _credentials.value.copy(first = newUsername)
@@ -29,6 +40,20 @@ class LoginViewModel(
     fun onHidePassword() : Boolean  {
         _showPassword.value = !_showPassword.value
        return showPassword.value
+    }
+
+    fun onRememberCredentials(remember: Boolean) {
+        _rememberCredentials.value = remember
+    }
+
+
+
+    fun isLogged(onLogin: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val isLogged = userPreferencesRepository.userPrefData.first()
+            println("isLogged: $isLogged")
+            onLogin.invoke(isLogged.isLoggedIn)
+        }
     }
 
     fun onLogin(
@@ -49,8 +74,13 @@ class LoginViewModel(
                     credentials.value.first,
                     credentials.value.second
                 )
-                println("userLogin: $userLogin")
                 if (userLogin != null) {
+                    userPreferencesRepository.updateUserName(userLogin.userName ?: "")
+                    userPreferencesRepository.updateEmail(userLogin.email ?: "")
+                    userPreferencesRepository.setLoggedIn(rememberCredentials.value)
+                    //se valida el cambio de estado para isLoggedIn...
+
+                    println("userLogin: $userLogin")
                     onSuccess.invoke()
                 } else {
                     onError.invoke("El password no es correcto.")

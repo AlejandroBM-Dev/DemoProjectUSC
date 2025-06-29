@@ -2,6 +2,7 @@ package com.raiserdev.demoproject
 
 import android.app.Application
 import com.raiserdev.demoproject.data.DriverFactory
+import com.raiserdev.demoproject.data.ds.dataStoreFileName
 import com.raiserdev.demoproject.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -15,9 +16,9 @@ class MainApplication: Application() {
             androidLogger()
             modules(
                 appModule(
-                    ProjectDatabase.invoke(
-                        DriverFactory(this@MainApplication).createDriver()
-                    )
+                    appDatabase = ProjectDatabase.invoke(
+                        DriverFactory(this@MainApplication).createDriver()),
+                    producePath = { applicationContext.filesDir.resolve(dataStoreFileName).absolutePath }
                 )
             )
         }

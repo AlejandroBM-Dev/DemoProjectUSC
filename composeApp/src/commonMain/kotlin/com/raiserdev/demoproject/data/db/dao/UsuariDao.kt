@@ -41,7 +41,8 @@ fun ProjectDatabase.getUsuarios(): Pair<Boolean, List<Usuario>> {
                 nickname = user.nickname,
                 numeroTelefonico = user.numero_telefonico,
                 fechaCreacion = user.fecha_creacion ?: throw IllegalArgumentException("La fecha de creación no puede ser nula"),
-                fechaActualizacion = user.fecha_actualizacion ?: throw IllegalArgumentException("La fecha de actualización no puede ser nula")
+                fechaActualizacion = user.fecha_actualizacion ?: throw IllegalArgumentException("La fecha de actualización no puede ser nula"),
+                recordarUsuario = if (user.recordar_usuario_login != 0L) user.recordar_usuario_login == 1L else false
             )
         }
         Pair(mappedUsuarios.isNotEmpty(), mappedUsuarios) // Devuelve true si hay usuarios

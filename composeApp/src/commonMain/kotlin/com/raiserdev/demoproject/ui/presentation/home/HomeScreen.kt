@@ -34,22 +34,31 @@ val cardList: MutableList<CardData> = mutableListOf()
 
 @Composable
 fun HomeScreen(
+    homeVM: HomeViewModel = koinViewModel(),
     onSettingsClick: () -> Unit,
     onBack: () -> Unit,
+    onAddNote: () -> Unit
 ) {
-    val homeViewModel = koinViewModel<HomeViewModel>()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             NotesTopAppBar(
                 title = "HomeScreen",
-                onBack = {},
-                onSettingsClick = {},
+                onBack = {
+                    homeVM.clearUserPreferences {
+                        onBack.invoke()
+                    }
+                },
+                onSettingsClick = {
+                },
             )
         },
         bottomBar = {
-            NotesBottomAppBar()
+            NotesBottomAppBar(
+                onSettingsClick = { onSettingsClick.invoke() },
+                onAddNote = { onAddNote.invoke() }
+            )
         }
     ) { paddingValues ->
         Column(

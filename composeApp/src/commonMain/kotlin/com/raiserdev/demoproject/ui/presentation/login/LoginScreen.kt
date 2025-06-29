@@ -54,6 +54,14 @@ fun LoginScreen (
 ){
     val credentials by loginVM.credentials.collectAsState()
 
+    loginVM.isLogged { isLogged ->
+        if (isLogged) {
+            onLoginSuccess.invoke()
+        } else {
+            println("status... isLogged: $isLogged")
+        }
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
     ) { padding ->
@@ -177,8 +185,8 @@ fun BodyView(
         ) {
             Text("Recordar")
             Checkbox(
-                checked = false,
-                onCheckedChange = {  }
+                checked = loginVM.rememberCredentials.collectAsState().value,
+                onCheckedChange = { loginVM.onRememberCredentials(it) }
             )
         }
         Spacer(modifier = Modifier.height(32.dp))
@@ -237,3 +245,5 @@ fun FootView(
         }
     }
 }
+
+

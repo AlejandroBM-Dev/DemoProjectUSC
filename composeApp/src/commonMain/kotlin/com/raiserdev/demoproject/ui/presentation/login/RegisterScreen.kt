@@ -83,12 +83,12 @@ fun RegisterScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            bodyView(
+            BodyView(
                 registerViewModel = registerVM,
                 modifier = Modifier.weight(1f),
             )
 
-            foot(
+            Foot(
                 registerViewModel = registerVM,
                 onRegisterSuccess = onRegisterSuccess,
                 onHelpClick = onHelpClick
@@ -99,7 +99,7 @@ fun RegisterScreen(
 }
 
 @Composable
-fun bodyView(
+fun BodyView(
     registerViewModel: RegisterViewModel,
     modifier: Modifier,
 ) {
@@ -285,7 +285,7 @@ fun bodyView(
 }
 
 @Composable
-fun foot(
+fun Foot(
     registerViewModel: RegisterViewModel,
     onRegisterSuccess: () -> Unit,
     onHelpClick: () -> Unit

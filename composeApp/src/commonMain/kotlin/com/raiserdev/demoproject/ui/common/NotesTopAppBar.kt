@@ -4,6 +4,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.SmartToy
+import androidx.compose.material.icons.filled.SupervisedUserCircle
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBar
@@ -25,6 +27,14 @@ fun NotesTopAppBar(
             IconButton(onClick = onBack) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBackIosNew,
+                    contentDescription = stringResource(Res.string.back)
+                )
+            }
+        },
+        actions = {
+            IconButton(onClick = onSettingsClick) {
+                Icon(
+                    imageVector = Icons.Filled.SmartToy,
                     contentDescription = stringResource(Res.string.back)
                 )
             }
