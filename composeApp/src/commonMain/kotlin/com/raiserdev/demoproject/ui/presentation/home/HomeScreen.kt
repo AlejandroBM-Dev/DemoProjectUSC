@@ -36,8 +36,8 @@ fun HomeScreen(
     homeVM: HomeViewModel = koinViewModel(),
     onSettingsClick: () -> Unit,
     onBack: () -> Unit,
-    onAddNote: () -> Unit,
-    onShowNote: (idNote: Int) -> Unit
+    onAddNote: (Long) -> Unit,
+    onShowNote: (idNote: Long) -> Unit
 ) {
     homeVM.showAllNotes()
 
@@ -60,7 +60,7 @@ fun HomeScreen(
         bottomBar = {
             NotesBottomAppBar(
                 onSettingsClick = { onSettingsClick.invoke() },
-                onAddNote = { onAddNote.invoke() }
+                onAddNote = { onAddNote(-1L) }
             )
         }
     ) { paddingValues ->
@@ -90,6 +90,7 @@ fun HomeScreen(
                         )
                     ) {
                         showToast("idNote: $it")
+                        onShowNote.invoke(it.toLong())
                     }
                 }
             }

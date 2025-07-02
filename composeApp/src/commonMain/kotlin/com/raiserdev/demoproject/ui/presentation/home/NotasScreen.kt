@@ -35,9 +35,11 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun NotasScreen(
     notasVM: NotasViewModel,
+    noteId: Long,
     onBackClick: () -> Unit,
     onSettingsClick: () -> Unit
 ) {
+    showToast("noteId: $noteId")
     val titleNote = notasVM.titleNote.collectAsState()
     val modifier = Modifier
     Scaffold(
