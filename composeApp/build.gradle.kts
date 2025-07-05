@@ -125,9 +125,9 @@ kotlin {
         }
     }
     // KSP Common sourceSet
-    sourceSets.named("commonMain").configure {
-        kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
-    }
+    //sourceSets.named("commonMain").configure {
+      //  kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
+    //}
 }
 
 // en iOS recuerda agregar la bandera “Other Linker Flags.” Add -lsqlite3 -> tuto https://medium.com/@hunterfreas/sqldelight-setup-a-local-database-for-kmp-compose-ios-android-65f7e2b1e224

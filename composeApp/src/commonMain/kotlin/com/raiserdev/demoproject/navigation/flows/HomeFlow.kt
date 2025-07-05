@@ -14,6 +14,9 @@ import com.raiserdev.demoproject.ui.presentation.home.NotasScreen
 import com.raiserdev.demoproject.ui.presentation.home.NotasViewModel
 import com.raiserdev.demoproject.ui.presentation.home.SettingsScreen
 import com.raiserdev.demoproject.ui.presentation.home.SettingsViewModel
+import com.raiserdev.demoproject.ui.presentation.home.UserEditScreen
+import com.raiserdev.demoproject.ui.presentation.home.UserEditViewModel
+import com.raiserdev.demoproject.utils.showToast
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,7 +61,6 @@ fun NavGraphBuilder.homeNavGraph(
     composable(Screen.Notas.route) { navBackStackEntry ->
         val notaVM = koinViewModel<NotasViewModel>()
         val noteId = navBackStackEntry.arguments?.getString(ArgParams.NOTE_ID)
-        println("noteId: $noteId")
         NotasScreen(
             notasVM = notaVM,
             noteId = noteId?.toLong() ?: -1L,
@@ -69,5 +71,21 @@ fun NavGraphBuilder.homeNavGraph(
                 navController.navigate(Screen.Settings.route)
             }
         )
+    }
+
+    composable(Screen.UserEdit.route) {
+        val userEditVM = koinViewModel<UserEditViewModel>()
+
+        UserEditScreen(
+            userEditVM = userEditVM,
+            onBackClick = {
+                navController.popBackStack()
+            },
+            onSaveChangesClick = {
+                showToast("SaveChanges...")
+                navController.popBackStack()
+            }
+        )
+
     }
 }

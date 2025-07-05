@@ -18,6 +18,8 @@ sealed class Screen(val route: String, val navArgument: List<NamedNavArgument> =
         fun createRoute(noteId: Long) = route.replace(ArgParams.toPath(ArgParams.NOTE_ID), noteId.toString())
     }
     data object Settings : Screen("settings")
+
+    data object UserEdit: Screen("userEdit")
 }
 
 object ArgParams {

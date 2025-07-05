@@ -25,13 +25,21 @@ class NotasViewModel(
 
     fun onTitleNoteChange(newTitle: String) {
         _titleNote.value = newTitle
-        println("titleNote: $newTitle _ titleNote: ${titleNote.value} ")
     }
 
     fun onContentNoteChange(newContent: String) {
         _contentNote.value = newContent
     }
 
+    fun getNoteData(noteId: Long) {
+        viewModelScope.launch {
+            val note = noteRepository.getNotaById(noteId)
+            note?.let {
+                _titleNote.value = it.titulo
+                _contentNote.value = it.contenido ?: ""
+            }
+        }
+    }
     fun saveNote(onSucces: (Boolean) -> Unit) {
         if (titleNote.value.isNotEmpty() && contentNote.value.isNotEmpty()) {
             viewModelScope.launch {

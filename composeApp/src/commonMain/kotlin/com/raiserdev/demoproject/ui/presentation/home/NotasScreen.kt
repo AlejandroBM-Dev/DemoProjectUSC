@@ -27,10 +27,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.raiserdev.demoproject.data.db.repository.fakeNotasRepo
 import com.raiserdev.demoproject.ui.common.NotesTopAppBar
+import com.raiserdev.demoproject.utils.NEW_NOTE_ID
 import com.raiserdev.demoproject.utils.showToast
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun NotasScreen(
@@ -39,15 +38,18 @@ fun NotasScreen(
     onBackClick: () -> Unit,
     onSettingsClick: () -> Unit
 ) {
-    showToast("noteId: $noteId")
     val titleNote = notasVM.titleNote.collectAsState()
     val modifier = Modifier
+
+    if (noteId != NEW_NOTE_ID) {
+        notasVM.getNoteData(noteId)
+    }
     Scaffold(
         modifier = modifier.fillMaxWidth(),
         topBar = {
             NotesTopAppBar(
                 title = if (titleNote.value.isNullOrEmpty()) {
-                    "Nueva nota."
+                    "Nueva nota"
                 } else {
                     titleNote.value
                 },

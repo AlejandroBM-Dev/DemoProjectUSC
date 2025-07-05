@@ -25,10 +25,12 @@ import demoprojectusc.composeapp.generated.resources.register_phone_number
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 class RegisterViewModel(
     private val repository: UserRepository
@@ -39,7 +41,8 @@ class RegisterViewModel(
         private const val MAX_VALIDATE_TEXT = 3
         private val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z0-9]+$".toRegex()
     }
-
+    @OptIn(ExperimentalTime::class)
+    val now: Instant = Clock.System.now()
     private val nameIcon = Icons.Default.Face
     private val nickNameIcon = Icons.Default.SmartToy
     private val calendarIcon = Icons.Default.Event
@@ -327,6 +330,7 @@ class RegisterViewModel(
         ),
     )
 
+    @OptIn(ExperimentalTime::class)
     private fun parseDdMmYyyy(dateString: String): String? {
         println("dateString: $dateString")
 
@@ -352,7 +356,8 @@ class RegisterViewModel(
         }
 
         // 5. Comparar con la fecha actual (Clock.System.now())
-        val currentDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+
+        val currentDate = now.toLocalDateTime(TimeZone.currentSystemDefault())
 
         return if (date > currentDate.date) {
             "Formato mayor al date actual"

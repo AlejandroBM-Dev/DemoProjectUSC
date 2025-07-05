@@ -11,6 +11,7 @@ import com.raiserdev.demoproject.notas.NotasProjectDatabase
 import com.raiserdev.demoproject.ui.presentation.home.HomeViewModel
 import com.raiserdev.demoproject.ui.presentation.home.NotasViewModel
 import com.raiserdev.demoproject.ui.presentation.home.SettingsViewModel
+import com.raiserdev.demoproject.ui.presentation.home.UserEditViewModel
 import com.raiserdev.demoproject.ui.presentation.login.HelpViewModel
 import com.raiserdev.demoproject.ui.presentation.login.LoginViewModel
 import com.raiserdev.demoproject.ui.presentation.login.RegisterViewModel
@@ -36,5 +37,6 @@ fun appModule(
     factory { RegisterViewModel(get()) }
     factory { HomeViewModel(get(), get()) }
     factory { NotasViewModel(get(),get()) }
+    factory { UserEditViewModel(get()) }
     factory { SettingsViewModel() }
 }
