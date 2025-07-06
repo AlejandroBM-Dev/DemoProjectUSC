@@ -37,7 +37,8 @@ fun HomeScreen(
     onSettingsClick: () -> Unit,
     onBack: () -> Unit,
     onAddNote: (Long) -> Unit,
-    onShowNote: (idNote: Long) -> Unit
+    onShowNote: (idNote: Long) -> Unit,
+    onEditUser: () -> Unit,
 ) {
     homeVM.showAllNotes()
 
@@ -53,7 +54,8 @@ fun HomeScreen(
                         onBack.invoke()
                     }
                 },
-                onSettingsClick = {
+                onEditUser = {
+                    onEditUser.invoke()
                 },
             )
         },

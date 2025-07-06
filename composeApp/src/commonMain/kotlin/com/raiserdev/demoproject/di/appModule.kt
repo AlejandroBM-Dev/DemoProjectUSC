@@ -37,6 +37,6 @@ fun appModule(
     factory { RegisterViewModel(get()) }
     factory { HomeViewModel(get(), get()) }
     factory { NotasViewModel(get(),get()) }
-    factory { UserEditViewModel(get()) }
+    factory { UserEditViewModel(get(),get()) }
     factory { SettingsViewModel() }
 }

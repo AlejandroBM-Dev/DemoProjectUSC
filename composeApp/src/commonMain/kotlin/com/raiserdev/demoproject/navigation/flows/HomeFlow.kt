@@ -1,10 +1,8 @@
 package com.raiserdev.demoproject.navigation.flows
 
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.Navigator
 import androidx.navigation.compose.composable
 import com.raiserdev.demoproject.navigation.data.ArgParams
 import com.raiserdev.demoproject.navigation.data.Screen
@@ -45,6 +43,9 @@ fun NavGraphBuilder.homeNavGraph(
                 navController.navigate(
                     route = route,
                 )
+            },
+            onEditUser = {
+                navController.navigate(Screen.UserEdit.route)
             }
         )
     }

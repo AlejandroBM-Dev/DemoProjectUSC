@@ -72,7 +72,7 @@ fun RegisterScreen(
                 onBack = {
                     onBack()
                 },
-                onSettingsClick = {}
+                onEditUser = {}
             )
         }
     ) { paddingValues ->
@@ -85,7 +85,6 @@ fun RegisterScreen(
 
             BodyView(
                 registerViewModel = registerVM,
-                modifier = Modifier.weight(1f),
             )
 
             Foot(
@@ -101,18 +100,17 @@ fun RegisterScreen(
 @Composable
 fun BodyView(
     registerViewModel: RegisterViewModel,
-    modifier: Modifier,
 ) {
 
     val dataRecord = registerViewModel.fields
     val focusManager = LocalFocusManager.current
+    val modifierLazyColumn = Modifier.fillMaxSize(1f)
 
     LazyColumn(
-        modifier = modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        val modifierLazyColumn = Modifier.fillMaxSize(1f)
 
         items(dataRecord) { data ->
             println("itemRecord: $dataRecord")

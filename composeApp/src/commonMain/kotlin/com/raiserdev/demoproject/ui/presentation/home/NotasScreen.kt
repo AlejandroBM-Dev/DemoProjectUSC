@@ -56,9 +56,7 @@ fun NotasScreen(
                 onBack = {
                     onBackClick.invoke()
                 },
-                onSettingsClick = {
-
-                }
+                onEditUser = {}
             )
         },
         bottomBar = { NotasBottomAppBar(

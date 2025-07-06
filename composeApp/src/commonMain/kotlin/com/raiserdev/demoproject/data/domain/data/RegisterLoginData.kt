@@ -2,15 +2,18 @@ package com.raiserdev.demoproject.data.domain.data
 
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.raiserdev.demoproject.ui.state.FieldState
+import demoprojectusc.composeapp.generated.resources.Res
+import demoprojectusc.composeapp.generated.resources.register_birth_date
+import demoprojectusc.composeapp.generated.resources.register_email
+import demoprojectusc.composeapp.generated.resources.register_father_last_name
+import demoprojectusc.composeapp.generated.resources.register_mother_last_name
+import demoprojectusc.composeapp.generated.resources.register_name
+import demoprojectusc.composeapp.generated.resources.register_nick_name
+import demoprojectusc.composeapp.generated.resources.register_password
+import demoprojectusc.composeapp.generated.resources.register_phone_number
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.StringResource
 
-enum class DataType {
-    NUMERIC,
-    HEXADECIMAL,
-    STRING,
-    DATE
-}
 
 sealed class RegisterData {
     // Common fields

@@ -49,7 +49,7 @@ fun HelpScreen(onBack: () -> Unit) {
             NotesTopAppBar(
                 title = stringResource(Res.string.help_title),
                 onBack = onBack,
-                onSettingsClick = { Unit }
+                onEditUser = { Unit }
             )
         },
     ) { paddingValues ->

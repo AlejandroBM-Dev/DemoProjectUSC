@@ -1,54 +1,22 @@
 package com.raiserdev.demoproject.ui.presentation.login
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AlternateEmail
-import androidx.compose.material.icons.filled.Event
-import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.SmartToy
-import androidx.compose.material.icons.filled.Smartphone
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raiserdev.demoproject.data.db.model.Usuario
+import com.raiserdev.demoproject.data.domain.UserFieldsProvider
 import com.raiserdev.demoproject.data.domain.data.RegisterData
 import com.raiserdev.demoproject.domain.UserRepository
 import com.raiserdev.demoproject.ui.state.FieldState
-import demoprojectusc.composeapp.generated.resources.Res
-import demoprojectusc.composeapp.generated.resources.register_birth_date
-import demoprojectusc.composeapp.generated.resources.register_email
-import demoprojectusc.composeapp.generated.resources.register_father_last_name
-import demoprojectusc.composeapp.generated.resources.register_mother_last_name
-import demoprojectusc.composeapp.generated.resources.register_name
-import demoprojectusc.composeapp.generated.resources.register_nick_name
-import demoprojectusc.composeapp.generated.resources.register_password
-import demoprojectusc.composeapp.generated.resources.register_phone_number
+import com.raiserdev.demoproject.utils.EMAIL_REGEX
+import com.raiserdev.demoproject.utils.MAX_VALIDATE_TEXT
+import com.raiserdev.demoproject.utils.parseDdMmYyyy
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlin.time.Clock
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import kotlin.time.ExperimentalTime
-import kotlin.time.Instant
 
 class RegisterViewModel(
     private val repository: UserRepository
 ): ViewModel() {
-
-    companion object {
-        private const val MAX_DATE_LENGTH = 8
-        private const val MAX_VALIDATE_TEXT = 3
-        private val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z0-9]+$".toRegex()
-    }
-    @OptIn(ExperimentalTime::class)
-    val now: Instant = Clock.System.now()
-    private val nameIcon = Icons.Default.Face
-    private val nickNameIcon = Icons.Default.SmartToy
-    private val calendarIcon = Icons.Default.Event
-    private val emailIcon = Icons.Default.AlternateEmail
-    private val phoneNumberIcon = Icons.Default.Smartphone
-    private val passwordIcon = Icons.Default.Lock
 
     val fields: List<RegisterData> get() = _fields //Todos mis campos que se agregaran en el registro.
 
@@ -58,7 +26,6 @@ class RegisterViewModel(
     private val _motherLastNameFieldState = MutableStateFlow(FieldState())
     private val _birthDateFieldState = MutableStateFlow(FieldState())
     private val _phoneFieldState = MutableStateFlow(FieldState())
-
     private val _emailFieldState = MutableStateFlow(FieldState())
     private val _password = MutableStateFlow(Pair("",""))
 
@@ -220,7 +187,7 @@ class RegisterViewModel(
             return
         }
 
-        if (!emailRegex.matches(newEmail)) {
+        if (!EMAIL_REGEX.matches(newEmail)) {
             _emailFieldState.value = _emailFieldState.value.copy(
                 text = newEmail,
                 isError = true,
@@ -271,100 +238,25 @@ class RegisterViewModel(
         _password.value = Pair(newPassword,validatePassword)
     }
 
-    private val _fields = listOf(
-        RegisterData.Text(
-            title = Res.string.register_nick_name,
-            icon = nickNameIcon,
-            length = 12,
-            fieldState = nickName,
-            onValueChanged = ::validateNickNameText
-        ),
-        RegisterData.Text(
-            title = Res.string.register_name,
-            icon = nameIcon,
-            length = 25,
-            fieldState = name,
-            onValueChanged = ::validateNameText
-        ),
-        RegisterData.Text(
-            title = Res.string.register_father_last_name,
-            icon = nameIcon,
-            length = 25,
-            fieldState = fatherLastName,
-            onValueChanged = ::validateFathersLastNameText
-        ),
-        RegisterData.Text(
-            title = Res.string.register_mother_last_name,
-            icon = nameIcon,
-            length = 25,
-            fieldState = motherLastName,
-            onValueChanged = ::validateMothersLastNameText
-        ),
-        RegisterData.Date(
-            title = Res.string.register_birth_date,
-            icon = calendarIcon,
-            length = 10,
-            fieldState = birthDate,
-            onValueChanged = ::validateBirthDayDate
-        ),
-        RegisterData.Text(
-            title = Res.string.register_email,
-            icon = emailIcon,
-            length = 50,
-            fieldState = email,
-            onValueChanged = ::validateEmailChange
-        ),
-        RegisterData.Phone(
-            title = Res.string.register_phone_number,
-            icon = phoneNumberIcon,
-            length = 20,
-            fieldState = phoneNumber,
-            onValueChanged = ::validPhoneNumberChange
-        ),
-        RegisterData.Auth(
-            title = Res.string.register_password,
-            icon = passwordIcon,
-            length = 8,
-            currentValue = password,
-            onValueChanged = ::onPasswordChange
-        ),
+    private val _fields: List<RegisterData> = UserFieldsProvider.provideFields(
+        nickName = nickName,
+        name = name,
+        fatherLastName = fatherLastName,
+        motherLastName = motherLastName,
+        birthDate = birthDate,
+        email = email,
+        phoneNumber = phoneNumber,
+        password = password,
+        onNickNameChange = ::validateNickNameText,
+        onNameChange = ::validateNameText,
+        onFatherLastNameChange = ::validateFathersLastNameText,
+        onMotherLastNameChange = ::validateMothersLastNameText,
+        onBirthDateChange = ::validateBirthDayDate,
+        onEmailChange = ::validateEmailChange,
+        onPhoneChange = ::validPhoneNumberChange,
+        onPasswordChange = ::onPasswordChange
     )
 
-    @OptIn(ExperimentalTime::class)
-    private fun parseDdMmYyyy(dateString: String): String? {
-        println("dateString: $dateString")
-
-        // 1. Validar longitud (sin separadores => 8 caracteres)
-        if (dateString.length != 8) return "Formato incorrecto"
-
-        // 2. Extraer día, mes y año
-        val day = dateString.substring(0, 2).toIntOrNull() ?: return "Día incorrecto"
-        val month = dateString.substring(2, 4).toIntOrNull() ?: return "Mes incorrecto"
-        val year = dateString.substring(4, 8).toIntOrNull() ?: return "Año incorrecto"
-        println("day:$day _ month: $month _ year:$year")
-
-        // 3. Revisar rangos básicos
-        if (day !in 1..31) return "Dia incorrecto"
-        if (month !in 1..12) return "Mes incorrecto"
-
-        // 4. Construir LocalDate de kotlinx.datetime
-        val date = try {
-            LocalDate(year, month, day)
-        } catch (e: IllegalArgumentException) {
-            // Cae aquí si la combinación no existe (ej. 31/11/2023, 29/02 en año no bisiesto, etc.)
-            return "Día incorrecto"
-        }
-
-        // 5. Comparar con la fecha actual (Clock.System.now())
-
-        val currentDate = now.toLocalDateTime(TimeZone.currentSystemDefault())
-
-        return if (date > currentDate.date) {
-            "Formato mayor al date actual"
-        } else {
-            null
-        }
-    }
 
     fun setRegister(isSucces: (Boolean) -> Unit){
 
