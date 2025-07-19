@@ -1,4 +1,4 @@
-package com.raiserdev.demoproject.ui.common
+package com.raiserdev.demoproject.ui.common.bar
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add

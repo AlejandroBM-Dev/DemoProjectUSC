@@ -1,4 +1,4 @@
-package com.raiserdev.demoproject.ui.common
+package com.raiserdev.demoproject.ui.common.bar
 
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.runtime.Composable

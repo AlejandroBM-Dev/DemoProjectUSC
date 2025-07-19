@@ -44,7 +44,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.raiserdev.demoproject.data.domain.data.RegisterData
-import com.raiserdev.demoproject.ui.common.NotesTopAppBar
+import com.raiserdev.demoproject.ui.common.bar.NotesTopAppBar
 import com.raiserdev.demoproject.utils.showToast
 import com.raiserdev.demoproject.utils.transformation.DateTransformation
 import com.raiserdev.demoproject.utils.transformation.PhoneMexTransformation

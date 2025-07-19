@@ -27,7 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.raiserdev.demoproject.ui.common.NotesTopAppBar
+import com.raiserdev.demoproject.ui.common.bar.NotesTopAppBar
 import com.raiserdev.demoproject.utils.NEW_NOTE_ID
 import com.raiserdev.demoproject.utils.showToast
 

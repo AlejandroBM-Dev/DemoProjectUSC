@@ -26,9 +26,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.raiserdev.demoproject.ui.common.CloseSessionDialog
-import com.raiserdev.demoproject.ui.common.NotesBottomAppBar
-import com.raiserdev.demoproject.ui.common.NotesTopAppBar
+import com.raiserdev.demoproject.ui.common.dialog.CloseSessionDialog
+import com.raiserdev.demoproject.ui.common.bar.NotesBottomAppBar
+import com.raiserdev.demoproject.ui.common.bar.NotesTopAppBar
 import com.raiserdev.demoproject.utils.NEW_NOTE_ID
 import com.raiserdev.demoproject.utils.showToast
 import org.koin.compose.viewmodel.koinViewModel
