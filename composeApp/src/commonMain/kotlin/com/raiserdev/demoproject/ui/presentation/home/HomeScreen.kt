@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.raiserdev.demoproject.ui.common.CloseSessionDialog
 import com.raiserdev.demoproject.ui.common.NotesBottomAppBar
 import com.raiserdev.demoproject.ui.common.NotesTopAppBar
 import com.raiserdev.demoproject.utils.NEW_NOTE_ID
@@ -44,16 +45,15 @@ fun HomeScreen(
     homeVM.showAllNotes()
 
     val showAllNotes = homeVM.listNotes.collectAsState()
-    println("showAllNotes: ${showAllNotes.value}")
+    val showCloseDialog = homeVM.showCloseSessionDialog.collectAsState()
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             NotesTopAppBar(
                 title = "HomeScreen",
                 onBack = {
-                    homeVM.clearUserPreferences {
-                        onBack.invoke()
-                    }
+                    homeVM.showCloseDialog(true)
                 },
                 onEditUser = {
                     onEditUser.invoke()
@@ -97,6 +97,21 @@ fun HomeScreen(
                     }
                 }
             }
+        }
+    }
+
+    showCloseDialog.let {
+        if (it.value) {
+            CloseSessionDialog(
+                onDismiss = {
+                    homeVM.showCloseDialog(false)
+                },
+                onConfirm = {
+                    homeVM.clearUserPreferences {
+                        onBack.invoke()
+                    }
+                }
+            )
         }
     }
 

@@ -19,6 +19,9 @@ class HomeViewModel(
     private val _listNotes = MutableStateFlow(mutableListOf<Nota>())
     val listNotes:StateFlow<MutableList<Nota>> get() = _listNotes.asStateFlow()
 
+    private val _showCloseSessionDialog = MutableStateFlow(false)
+    val showCloseSessionDialog: StateFlow<Boolean> get() = _showCloseSessionDialog.asStateFlow()
+
     fun clearUserPreferences(onResult: (Boolean) -> Unit) {
         viewModelScope.launch {
             val result = userPreferencesRepository.clearData()
@@ -34,5 +37,9 @@ class HomeViewModel(
 
             _listNotes.value = notes.toMutableList()
         }
+    }
+
+    fun showCloseDialog( show: Boolean ) {
+        _showCloseSessionDialog.value = show
     }
 }
