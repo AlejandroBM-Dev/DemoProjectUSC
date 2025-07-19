@@ -46,6 +46,9 @@ class LoginViewModel(
         _rememberCredentials.value = remember
     }
 
+    private fun cleanLoginParams() {
+        _credentials.value = Pair("", "")
+    }
 
     fun isLogged(onLogin: (Boolean) -> Unit) {
         viewModelScope.launch {
@@ -83,6 +86,7 @@ class LoginViewModel(
                     //se valida el cambio de estado para isLoggedIn...
 
                     println("userLogin: $userLogin")
+                    cleanLoginParams()
                     onSuccess.invoke()
                 } else {
                     onError.invoke("El password no es correcto.")

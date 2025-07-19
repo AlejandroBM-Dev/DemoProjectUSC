@@ -11,12 +11,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.raiserdev.demoproject.ui.common.NotesBottomAppBar
 import com.raiserdev.demoproject.ui.common.NotesTopAppBar
+import com.raiserdev.demoproject.utils.NEW_NOTE_ID
 import com.raiserdev.demoproject.utils.showToast
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -62,7 +63,7 @@ fun HomeScreen(
         bottomBar = {
             NotesBottomAppBar(
                 onSettingsClick = { onSettingsClick.invoke() },
-                onAddNote = { onAddNote(-1L) }
+                onAddNote = { onAddNote(NEW_NOTE_ID) }
             )
         }
     ) { paddingValues ->
@@ -74,7 +75,7 @@ fun HomeScreen(
 
             Text(
                 "NOTAS",
-                style = MaterialTheme.typography.h3
+                style = MaterialTheme.typography.headlineMedium
             )
 
             LazyVerticalGrid(
