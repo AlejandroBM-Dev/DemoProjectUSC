@@ -84,6 +84,7 @@ class NotasViewModel(
                 showToast("Error al guardar la nota: ${it.message}")
                 return@getOrElse 0
             }
+            //Usa un LONG para saber si se pudo guardar la nota
             if (insertNote > 0) {
                 showToast("Nota guardada con éxito.")
                 _titleNote.value = ""
@@ -105,6 +106,7 @@ class NotasViewModel(
                 showToast("Error al actualizar la nota: ${it.message}")
                 return@getOrElse false
             }
+            //Usa un BOOLEAN para saber si se pudo actualizar la nota
             if (updateNote) {
                 showToast("Nota actualizada con éxito.")
                 _titleNote.value = ""
@@ -114,7 +116,6 @@ class NotasViewModel(
                 showToast("No se pudo actualizar la nota.")
                 onSucces.invoke(false)
             }
-
         }
     }
 
