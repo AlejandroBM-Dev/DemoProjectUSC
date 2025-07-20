@@ -85,17 +85,17 @@ class NotasViewModel(
                 return@getOrElse 0
             }
             //Usa un LONG para saber si se pudo guardar la nota
-            if (insertNote > 0) {
-                showToast("Nota guardada con éxito.")
-                _titleNote.value = ""
-                _contentNote.value = ""
-                onSucces.invoke(true)
+            val isSuccess = if (insertNote > 0) {
+                cleanData("Nota guardada con éxito.")
+                true
             } else {
                 showToast("No se pudo guardar la nota.")
-                onSucces.invoke(false)
+                false
             }
+            onSucces.invoke(
+                isSuccess
+            )
         }
-
     }
 
     private fun updateFlow(nota: Nota, onSucces: (Boolean) -> Unit){
@@ -107,16 +107,26 @@ class NotasViewModel(
                 return@getOrElse false
             }
             //Usa un BOOLEAN para saber si se pudo actualizar la nota
-            if (updateNote) {
-                showToast("Nota actualizada con éxito.")
-                _titleNote.value = ""
-                _contentNote.value = ""
-                onSucces.invoke(true)
+            val isSuccess = if (updateNote) {
+                cleanData("Nota actualizada con éxito.")
+                true
             } else {
                 showToast("No se pudo actualizar la nota.")
-                onSucces.invoke(false)
+                false
             }
+
+            onSucces.invoke(
+                isSuccess
+            )
         }
+    }
+
+    private fun cleanData(
+        message: String,
+    ) {
+        showToast(message)
+        _titleNote.value = ""
+        _contentNote.value = ""
     }
 
 
