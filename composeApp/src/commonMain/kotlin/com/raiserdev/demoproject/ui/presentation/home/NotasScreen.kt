@@ -38,12 +38,13 @@ fun NotasScreen(
     onBackClick: () -> Unit,
     onSettingsClick: () -> Unit
 ) {
-    val titleNote = notasVM.titleNote.collectAsState()
-    val modifier = Modifier
-
     if (noteId != NEW_NOTE_ID) {
         notasVM.getNoteData(noteId)
     }
+
+    val titleNote = notasVM.titleNote.collectAsState()
+    val modifier = Modifier
+
     Scaffold(
         modifier = modifier.fillMaxWidth(),
         topBar = {
@@ -118,16 +119,16 @@ fun NotasBottomAppBar(
 ) {
     BottomAppBar(
         actions = {
-            IconButton( onClick = {
+            /*IconButton( onClick = {
                 showToast("Bolt")
             } ) {
                 Icon(Icons.Filled.Bolt, contentDescription = "Bolt")
-            }
-            IconButton( onClick = {
+            }*/
+            /*IconButton( onClick = {
                 showToast("Camera")
             } ) {
                 Icon(Icons.Filled.Camera, contentDescription = "Camera")
-            }
+            }*/
             IconButton( onClick = {
                 showToast("Search")
             } ) {
