@@ -2,6 +2,8 @@ package com.raiserdev.demoproject.ui.presentation.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,16 +17,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SmartToy
+import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -50,6 +56,9 @@ fun UserEditScreen(
     onBackClick: () -> Unit,
     onSaveChangesClick: () -> Unit,
 ) {
+    val scrollState = rememberScrollState()
+    val editEnable by remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             UserEditTopAppBar(
@@ -65,7 +74,13 @@ fun UserEditScreen(
     ) { paddingValues ->
         val modifier = Modifier.padding(paddingValues)
         Column(
-            modifier = modifier.fillMaxSize()
+            modifier = modifier
+                .fillMaxSize()
+                .scrollable(
+                    state = scrollState,
+                    orientation = Orientation.Vertical,
+                    enabled = true
+                ),
         ) {
             UserEditHead(
                 userEditVM = userEditVM
@@ -75,7 +90,8 @@ fun UserEditScreen(
             )
             UserEditFoot(
                 userEditVM = userEditVM,
-                onSaveEditClick = { onSaveChangesClick.invoke() },
+                onSaveEditClick = { onSaveChangesClick.invoke()
+                                  },
                 onCanceClick = { onBackClick.invoke() }
             )
         }
@@ -92,7 +108,7 @@ fun UserEditHead(
         modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight(0.20f)
-            .background(Color.Gray),
+        .background(Color.Gray),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -136,11 +152,11 @@ fun UserEditBody(
 ) {
     val dataEdit = userEditVM.fields
     val focusManager = LocalFocusManager.current
-    val modifierLazyColumn = Modifier.fillMaxSize(1f)
-
+    val modifierLazyColumn = Modifier.fillMaxWidth()
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .fillMaxHeight(0.90f)
             .background(Color.White)
             .padding(10.dp)
     ) {
@@ -249,7 +265,7 @@ fun UserEditBody(
 @Composable
 fun UserEditFoot(
     userEditVM: UserEditViewModel,
-    onSaveEditClick: () -> Unit,
+    onSaveEditClick: (Boolean) -> Unit,
     onCanceClick: () -> Unit,
 ) {
     Row(
@@ -264,23 +280,26 @@ fun UserEditFoot(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        val modifier = Modifier.fillMaxWidth(0.4f).weight(0.9f)
         Button(
-            modifier = Modifier.fillMaxWidth(0.4f).weight(0.9f),
+            modifier = modifier,
             onClick = onCanceClick
         ) {
-            androidx.compose.material.Text(
+            Text(
                 stringResource(Res.string.help),
+                color = Color.White
             )
         }
         Spacer(modifier = Modifier.width(8.dp)) // Espaciado entre botones
         Button(
-            modifier = Modifier.fillMaxWidth(0.4f).weight(0.9f),
+            modifier = modifier,
             onClick = {
-                showToast("User edit click...")
+                onSaveEditClick.invoke(true)
             }
         ) {
-            androidx.compose.material.Text(
+            Text(
                 stringResource(Res.string.accept),
+                color = Color.White
             )
         }
     }

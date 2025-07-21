@@ -62,6 +62,7 @@ fun HomeScreen(
         },
         bottomBar = {
             NotesBottomAppBar(
+                homeVM = homeVM,
                 onSettingsClick = { onSettingsClick.invoke() },
                 onAddNote = { onAddNote(NEW_NOTE_ID) },
                 onUpdateViewGridOrList = {

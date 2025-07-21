@@ -25,6 +25,9 @@ class UserEditViewModel(
         getUser()
     }
 
+    private val _editUser = MutableStateFlow(false)
+    val editUser: StateFlow<Boolean> get() = _editUser
+
     private val _nameFieldState = MutableStateFlow(FieldState())
     private val _nickNameFieldState = MutableStateFlow(FieldState())
     private val _fatherLastNameFieldState = MutableStateFlow(FieldState())
@@ -51,6 +54,47 @@ class UserEditViewModel(
         viewModelScope.launch {
             val userDataStore = userPreferencesRepository.userPrefData.first()
             _user.value = userRepository.getUserById(userDataStore.userId)
+
+            user.value?.let {
+                _nickNameFieldState.value = _nickNameFieldState.value.copy(
+                    text = it.nickname ?: "",
+                    isError = false,
+                    errorMessage = null
+                )
+                _nameFieldState.value = _nameFieldState.value.copy(
+                    text = it.userName ?: "",
+                    isError = false,
+                    errorMessage = null
+                )
+                _fatherLastNameFieldState.value = _fatherLastNameFieldState.value.copy(
+                    text = it.userFathersName ?: "",
+                    isError = false,
+                    errorMessage = null
+                )
+                _motherLastNameFieldState.value = _motherLastNameFieldState.value.copy(
+                    text = it.userMothersName ?: "",
+                    isError = false,
+                    errorMessage = null
+                )
+                _birthDateFieldState.value = _birthDateFieldState.value.copy(
+                    text = it.birthDate ?: "",
+                    isError = false,
+                    errorMessage = null
+                )
+                _emailFieldState.value = _emailFieldState.value.copy(
+                    text = it.email ?: "",
+                    isError = false,
+                    errorMessage = null
+                )
+                _phoneFieldState.value = _phoneFieldState.value.copy(
+                    text = it.numeroTelefonico ?: "",
+                    isError = false,
+                    errorMessage = null
+                )
+            }
+
+
+
         }
     }
 
@@ -238,6 +282,10 @@ class UserEditViewModel(
             errorMessage = null
         )
 
+    }
+
+    fun editUser(enable: Boolean) {
+        _editUser.value = enable
     }
 
     private val _fields: List<RegisterData> = UserFieldsProvider.provideFields(

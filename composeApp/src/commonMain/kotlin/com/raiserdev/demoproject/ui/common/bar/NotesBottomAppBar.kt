@@ -1,6 +1,7 @@
 package com.raiserdev.demoproject.ui.common.bar
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Home
@@ -12,14 +13,19 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import com.raiserdev.demoproject.ui.presentation.home.HomeViewModel
 import com.raiserdev.demoproject.utils.showToast
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun NotesBottomAppBar(
+    homeVM: HomeViewModel = koinViewModel(),
     onSettingsClick: () -> Unit,
     onAddNote: () -> Unit,
     onUpdateViewGridOrList: () -> Unit
 ){
+    val updateGridOrList = homeVM.updateGridOrList.collectAsState()
     BottomAppBar(
         actions = {
 
@@ -36,7 +42,11 @@ fun NotesBottomAppBar(
                 onClick = { onUpdateViewGridOrList.invoke() },
             ) {
                 Icon(
-                    Icons.Filled.GridView,
+                    if (updateGridOrList.value) {
+                        Icons.Filled.GridView
+                    } else {
+                        Icons.AutoMirrored.Filled.List
+                    },
                     "Mostrar notas en grid."
                 )
             }
