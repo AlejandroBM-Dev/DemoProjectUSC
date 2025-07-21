@@ -18,6 +18,7 @@ import com.raiserdev.demoproject.utils.showToast
 fun NotesBottomAppBar(
     onSettingsClick: () -> Unit,
     onAddNote: () -> Unit,
+    onUpdateViewGridOrList: () -> Unit
 ){
     BottomAppBar(
         actions = {
@@ -32,7 +33,7 @@ fun NotesBottomAppBar(
             }
 
             IconButton(
-                onClick = { showToast("Grid notas.") },
+                onClick = { onUpdateViewGridOrList.invoke() },
             ) {
                 Icon(
                     Icons.Filled.GridView,

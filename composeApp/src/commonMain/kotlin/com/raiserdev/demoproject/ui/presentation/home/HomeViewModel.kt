@@ -16,8 +16,10 @@ class HomeViewModel(
     private val userPreferencesRepository: UserPreferencesRepository
 ): ViewModel() {
 
+    private val _updateGridOrList = MutableStateFlow(false)
+    val updateGridOrList: StateFlow<Boolean> get() = _updateGridOrList.asStateFlow()
     private val _listNotes = MutableStateFlow(mutableListOf<Nota>())
-    val listNotes:StateFlow<MutableList<Nota>> get() = _listNotes.asStateFlow()
+    val listNotes: StateFlow<MutableList<Nota>> get() = _listNotes.asStateFlow()
 
     private val _showCloseSessionDialog = MutableStateFlow(false)
     val showCloseSessionDialog: StateFlow<Boolean> get() = _showCloseSessionDialog.asStateFlow()
@@ -41,5 +43,19 @@ class HomeViewModel(
 
     fun showCloseDialog( show: Boolean ) {
         _showCloseSessionDialog.value = show
+    }
+    fun getStatsChangeGridOrList() {
+        var changeGridOrList = false
+        viewModelScope.launch {
+            changeGridOrList = userPreferencesRepository.sessionPrefData.first().changeGridOrList
+            println("last: $changeGridOrList")
+            _updateGridOrList.value = changeGridOrList
+        }
+    }
+    fun changeGridOrList(update: Boolean) {
+        viewModelScope.launch {
+            userPreferencesRepository.updateChangeGridOrList(update)
+        }
+        _updateGridOrList.value = update
     }
 }

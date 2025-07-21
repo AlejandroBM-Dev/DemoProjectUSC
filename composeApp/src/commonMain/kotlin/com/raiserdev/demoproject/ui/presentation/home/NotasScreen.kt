@@ -49,10 +49,8 @@ fun NotasScreen(
         modifier = modifier.fillMaxWidth(),
         topBar = {
             NotesTopAppBar(
-                title = if (titleNote.value.isNullOrEmpty()) {
+                title = titleNote.value.ifEmpty {
                     "Nueva nota"
-                } else {
-                    titleNote.value
                 },
                 onBack = {
                     onBackClick.invoke()

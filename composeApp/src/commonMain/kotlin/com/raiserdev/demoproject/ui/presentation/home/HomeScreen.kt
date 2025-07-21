@@ -43,10 +43,10 @@ fun HomeScreen(
     onEditUser: () -> Unit,
 ) {
     homeVM.showAllNotes()
-
+    homeVM.getStatsChangeGridOrList()
     val showAllNotes = homeVM.listNotes.collectAsState()
     val showCloseDialog = homeVM.showCloseSessionDialog.collectAsState()
-
+    val updateGridOrList = homeVM.updateGridOrList.collectAsState()
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -63,7 +63,10 @@ fun HomeScreen(
         bottomBar = {
             NotesBottomAppBar(
                 onSettingsClick = { onSettingsClick.invoke() },
-                onAddNote = { onAddNote(NEW_NOTE_ID) }
+                onAddNote = { onAddNote(NEW_NOTE_ID) },
+                onUpdateViewGridOrList = {
+                    homeVM.changeGridOrList(!homeVM.updateGridOrList.value)
+                }
             )
         }
     ) { paddingValues ->
@@ -79,7 +82,13 @@ fun HomeScreen(
             )
 
             LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = 128.dp)
+                columns = GridCells.Adaptive(minSize =
+                    if (updateGridOrList.value) {
+                        250.dp
+                    } else {
+                        125.dp
+                    }
+                )
             ) {
                 items(showAllNotes.value.size) { index ->
 
