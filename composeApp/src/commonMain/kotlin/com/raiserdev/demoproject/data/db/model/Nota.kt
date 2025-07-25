@@ -5,6 +5,7 @@ data class Nota(
     val titulo: String,
     val contenido: String?,
     val usuarioId: Long,
+    val labelId: Int = 0,
     val fechaCreacion: String,
     val fechaActualizacion: String
 )

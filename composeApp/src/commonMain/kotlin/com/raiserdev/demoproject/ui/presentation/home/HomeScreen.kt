@@ -6,11 +6,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.CardDefaults
@@ -26,9 +30,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.raiserdev.demoproject.ui.common.dialog.CloseSessionDialog
+import com.raiserdev.demoproject.data.db.model.Label
+import com.raiserdev.demoproject.data.db.model.LabelsData
+import com.raiserdev.demoproject.ui.common.LabelItem
 import com.raiserdev.demoproject.ui.common.bar.NotesBottomAppBar
 import com.raiserdev.demoproject.ui.common.bar.NotesTopAppBar
+import com.raiserdev.demoproject.ui.common.dialog.CloseSessionDialog
 import com.raiserdev.demoproject.utils.NEW_NOTE_ID
 import com.raiserdev.demoproject.utils.showToast
 import org.koin.compose.viewmodel.koinViewModel
@@ -42,11 +49,18 @@ fun HomeScreen(
     onShowNote: (idNote: Long) -> Unit,
     onEditUser: () -> Unit,
 ) {
-    homeVM.showAllNotes()
-    homeVM.getStatsChangeGridOrList()
+
+    homeVM.apply {
+        showAllNotes()
+        getStatsChangeGridOrList()
+        getLabels()
+    }
+
+    val showAllLabels = homeVM.labelsList.collectAsState()
     val showAllNotes = homeVM.listNotes.collectAsState()
     val showCloseDialog = homeVM.showCloseSessionDialog.collectAsState()
     val updateGridOrList = homeVM.updateGridOrList.collectAsState()
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -71,6 +85,7 @@ fun HomeScreen(
             )
         }
     ) { paddingValues ->
+
         Column(
             modifier = Modifier.fillMaxSize().padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -80,6 +95,10 @@ fun HomeScreen(
             Text(
                 "NOTAS",
                 style = MaterialTheme.typography.headlineMedium
+            )
+
+            LabelsComponent(
+                labelsList = showAllLabels.value
             )
 
             LazyVerticalGrid(
@@ -125,6 +144,24 @@ fun HomeScreen(
         }
     }
 
+}
+
+@Composable
+fun LabelsComponent(
+    labelsList: List<LabelsData>
+) {
+    LazyRow(
+        modifier = Modifier.padding(start = 5.dp, end = 5.dp).fillMaxWidth().wrapContentHeight(),
+        horizontalArrangement = Arrangement.spacedBy(5.dp),
+    ) {
+        items(labelsList) { label ->
+            LabelItem(
+                data = label,
+            ){
+                showToast("idLabel: $it")
+            }
+        }
+    }
 }
 
 @Composable

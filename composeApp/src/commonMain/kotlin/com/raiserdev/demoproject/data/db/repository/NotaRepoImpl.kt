@@ -49,6 +49,7 @@ class NotaRepoImpl(
             queries.deleteNota(id)
             true
         } catch (e: Exception) {
+            e.printStackTrace()
             false
         }
     }

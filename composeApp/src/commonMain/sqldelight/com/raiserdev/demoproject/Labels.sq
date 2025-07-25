@@ -1,0 +1,29 @@
+CREATE TABLE labels (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    usuario_id INTEGER NOT NULL,
+    label TEXT NOT NULL,
+    count INTEGER DEFAULT 0,
+    colorHex INTEGER NOT NULL
+);
+
+insertLabel:
+INSERT INTO labels ( usuario_id, label, count, colorHex)
+VALUES (:usuario_id,:label, :count, :colorHex);
+
+getLabels:
+SELECT * FROM labels;
+
+getUserLabelsById:
+SELECT * FROM labels
+WHERE usuario_id = :usuario_id;
+
+getLabelById:
+SELECT * FROM labels WHERE id = :id;
+
+updateLabel:
+UPDATE labels
+SET label = :label, count = :count, colorHex = :colorHex
+WHERE id = :id;
+
+deleteLabel:
+DELETE FROM labels WHERE id = :id;

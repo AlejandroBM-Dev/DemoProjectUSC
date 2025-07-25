@@ -1,10 +1,12 @@
 package com.raiserdev.demoproject.di
 
+import com.raiserdev.demoproject.data.db.repository.LabelRepoImpl
 import com.raiserdev.demoproject.data.db.repository.NotaRepoImpl
 import com.raiserdev.demoproject.data.db.repository.UserRepoImpl
 import com.raiserdev.demoproject.data.ds.PrefsDataStore
 import com.raiserdev.demoproject.data.ds.UserPreferencesRepository
 import com.raiserdev.demoproject.data.ds.createDataStore
+import com.raiserdev.demoproject.domain.LabelRepository
 import com.raiserdev.demoproject.domain.NotasRepository
 import com.raiserdev.demoproject.domain.UserRepository
 import com.raiserdev.demoproject.notas.NotasProjectDatabase
@@ -30,12 +32,12 @@ fun appModule(
     //REPOSITORY
     single<UserRepository> { UserRepoImpl(appDatabase) }
     single<NotasRepository> { NotaRepoImpl(appDatabase) }
-
+    single<LabelRepository> { LabelRepoImpl(appDatabase) }
     //VIEW MODELS
     factory { HelpViewModel() }
     factory { LoginViewModel(get(), get()) }
     factory { RegisterViewModel(get()) }
-    factory { HomeViewModel(get(), get()) }
+    factory { HomeViewModel(get(), get(), get()) }
     factory { NotasViewModel(get(),get()) }
     factory { UserEditViewModel(get(),get()) }
     factory { SettingsViewModel() }
