@@ -55,11 +55,12 @@ class HomeViewModel(
 
                     println("insert: $insert")
                 }
+                getLabels()
             }
         }
     }
 
-    fun getLabels() {
+    private fun getLabels() {
         viewModelScope.launch {
             userPreferencesRepository
                 .userPrefData

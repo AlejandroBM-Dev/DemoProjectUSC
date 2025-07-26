@@ -2,6 +2,7 @@ package com.raiserdev.demoproject.domain
 
 import com.raiserdev.demoproject.data.db.model.Label
 import com.raiserdev.demoproject.data.db.model.LabelsData
+import kotlinx.coroutines.Job
 
 interface LabelRepository {
     suspend fun insert(label: Label): Long

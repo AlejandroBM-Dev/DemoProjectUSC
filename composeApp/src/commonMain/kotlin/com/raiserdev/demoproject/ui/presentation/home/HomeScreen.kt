@@ -1,5 +1,7 @@
 package com.raiserdev.demoproject.ui.presentation.home
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -7,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -15,7 +18,9 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Notes
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -24,20 +29,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.raiserdev.demoproject.data.db.model.Label
 import com.raiserdev.demoproject.data.db.model.LabelsData
+import com.raiserdev.demoproject.data.db.model.Nota
 import com.raiserdev.demoproject.ui.common.LabelItem
 import com.raiserdev.demoproject.ui.common.bar.NotesBottomAppBar
 import com.raiserdev.demoproject.ui.common.bar.NotesTopAppBar
 import com.raiserdev.demoproject.ui.common.dialog.CloseSessionDialog
 import com.raiserdev.demoproject.utils.NEW_NOTE_ID
 import com.raiserdev.demoproject.utils.showToast
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -53,7 +62,7 @@ fun HomeScreen(
     homeVM.apply {
         showAllNotes()
         getStatsChangeGridOrList()
-        getLabels()
+        //getLabels()
     }
 
     val showAllLabels = homeVM.labelsList.collectAsState()
@@ -101,31 +110,16 @@ fun HomeScreen(
                 labelsList = showAllLabels.value
             )
 
-            LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize =
-                    if (updateGridOrList.value) {
-                        250.dp
-                    } else {
-                        125.dp
-                    }
+            if (showAllNotes.value.isNotEmpty()) {
+                NotesListComponent(
+                    onShowNote = onShowNote,
+                    showAllNotes = showAllNotes.value,
+                    updateGridOrList = updateGridOrList.value
                 )
-            ) {
-                items(showAllNotes.value.size) { index ->
-
-                    ItemCard(
-                        cardData = CardData(
-                            idNote = showAllNotes.value[index].id.toInt(),
-                            title = showAllNotes.value[index].titulo,
-                            textCard = showAllNotes.value[index].contenido?.take(20).toString(),
-                            dateCreated = showAllNotes.value[index].fechaCreacion,
-                            backgroundColor = Color.Red,
-                        )
-                    ) {
-                        showToast("idNote: $it")
-                        onShowNote.invoke(it.toLong())
-                    }
-                }
+            } else {
+                EmptyList()
             }
+
         }
     }
 
@@ -146,6 +140,69 @@ fun HomeScreen(
 
 }
 
+@Composable
+fun EmptyList() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(15.dp)
+            .clip(RoundedCornerShape(15.dp))
+            .background(Color.LightGray),
+    ) {
+        Column(
+            modifier = Modifier.align(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+
+            Image(
+                imageVector = Icons.AutoMirrored.Filled.Notes,
+                modifier = Modifier.size(100.dp),
+                contentDescription = "No hay notas"
+            )
+
+            Spacer(modifier = Modifier.height(15.dp))
+            Text(
+                text = "No hay notas",
+                fontSize = 35.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+        }
+    }
+}
+
+@Composable
+fun NotesListComponent(
+    onShowNote: (idNote: Long) -> Unit,
+    showAllNotes: MutableList<Nota>,
+    updateGridOrList: Boolean
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(minSize =
+            if (updateGridOrList) {
+                250.dp
+            } else {
+                125.dp
+            }
+        )
+    ) {
+        items(showAllNotes.size) { index ->
+
+            ItemCard(
+                cardData = CardData(
+                    idNote = showAllNotes[index].id.toInt(),
+                    title = showAllNotes[index].titulo,
+                    textCard = showAllNotes[index].contenido?.take(20).toString(),
+                    dateCreated = showAllNotes[index].fechaCreacion,
+                    backgroundColor = Color.Red,
+                )
+            ) {
+                showToast("idNote: $it")
+                onShowNote.invoke(it.toLong())
+            }
+        }
+    }
+}
 @Composable
 fun LabelsComponent(
     labelsList: List<LabelsData>

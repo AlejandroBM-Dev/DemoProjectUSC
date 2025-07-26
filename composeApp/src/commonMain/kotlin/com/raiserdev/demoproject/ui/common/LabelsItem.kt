@@ -28,6 +28,7 @@ fun LabelItem(
     data: LabelsData = LabelsData(-1, 0,"Label", 0, color = Color.Red),
     onClick: (Int) -> Unit,
 ){
+    print("labelData: ${data.color}")
     Card(
         modifier = modifier.wrapContentSize(),
         colors = CardDefaults.cardColors(containerColor = data.color),

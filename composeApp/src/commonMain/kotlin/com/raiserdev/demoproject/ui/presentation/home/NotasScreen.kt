@@ -1,18 +1,24 @@
 package com.raiserdev.demoproject.ui.presentation.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Bolt
-import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material.icons.filled.NewLabel
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.BottomAppBar
@@ -25,7 +31,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.raiserdev.demoproject.ui.common.bar.NotesTopAppBar
 import com.raiserdev.demoproject.utils.NEW_NOTE_ID
@@ -68,7 +77,10 @@ fun NotasScreen(
             modifier = modifier.fillMaxSize()
         ) {
             NotasHead(
-                notaVM = notasVM
+                notaVM = notasVM,
+                onSelectLabel = {
+
+                }
             )
             NotasBody(
                 notaVM = notasVM
@@ -81,18 +93,32 @@ fun NotasScreen(
 @Composable
 fun NotasHead(
     notaVM: NotasViewModel,
+    onSelectLabel: () -> Unit
 ) {
-    val modifier = Modifier.fillMaxWidth().padding(10.dp)
+    val modifier = Modifier.wrapContentHeight().fillMaxWidth().padding(start = 10.dp, end = 10.dp, top = 5.dp, bottom = 5.dp)
     val titleNote = notaVM.titleNote.collectAsState()
-    OutlinedTextField(
-        value = titleNote.value,
-        onValueChange = {
-            println("notaTitle: $it")
-            notaVM.onTitleNoteChange(it)
-                        },
-        label = { Text("Agrega un titulo.") },
-        modifier = modifier.padding(10.dp).fillMaxWidth()
-    )
+
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        OutlinedTextField(
+            value = titleNote.value,
+            onValueChange = { notaVM.onTitleNoteChange(it) },
+            label = { Text("Agrega un titulo.") },
+            modifier = Modifier.fillMaxWidth().weight(0.8f)
+        )
+        Spacer(modifier = Modifier.width(15.dp))
+        IconButton(
+            onClick = {
+                onSelectLabel.invoke()
+            },
+            modifier = Modifier.weight(0.2f).clip(CircleShape).background(Color.Blue)
+        ) {
+            Icon(Icons.Filled.NewLabel, contentDescription = "Select label",tint = Color.White)
+        }
+    }
 }
 
 @Composable

@@ -2,8 +2,10 @@ package com.raiserdev.demoproject.ui.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.raiserdev.demoproject.data.db.model.LabelsData
 import com.raiserdev.demoproject.data.db.model.Nota
 import com.raiserdev.demoproject.data.ds.UserPreferencesRepository
+import com.raiserdev.demoproject.domain.LabelRepository
 import com.raiserdev.demoproject.domain.NotasRepository
 import com.raiserdev.demoproject.utils.NEW_NOTE_ID
 import com.raiserdev.demoproject.utils.showToast
@@ -12,16 +14,27 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlin.collections.mutableListOf
 
 class NotasViewModel(
     private val noteRepository: NotasRepository,
+    private val labelRepository: LabelRepository,
     private val userPreferencesRepository: UserPreferencesRepository
 ): ViewModel() {
-
+    init {
+        viewModelScope.launch {
+            userId = userPreferencesRepository.userPrefData.first().userId
+        }
+        getLabels()
+    }
     var mNoteId: Long = NEW_NOTE_ID
+    private var userId: Long = 0
 
     private val _titleNote = MutableStateFlow("")
     val titleNote: StateFlow<String> get() = _titleNote
+
+    private val _labels = MutableStateFlow(mutableListOf<LabelsData>())
+    val labels: StateFlow<MutableList<LabelsData>> get() = _labels.asStateFlow()
 
     private val _contentNote = MutableStateFlow("")
     val contentNote: StateFlow<String> get() = _contentNote.asStateFlow()
@@ -44,16 +57,23 @@ class NotasViewModel(
             }
         }
     }
+
+    private fun getLabels() {
+        viewModelScope.launch {
+            val labels = labelRepository.getAllById(userId)
+            _labels.value = labels.toMutableList()
+
+        }
+    }
     fun saveNote(onSucces: (Boolean) -> Unit) {
         if (titleNote.value.isNotEmpty() && contentNote.value.isNotEmpty()) {
             viewModelScope.launch {
-                val userPF = userPreferencesRepository.userPrefData.first()
 
                 val newNote = Nota(
                     id = 0,
                     titulo = titleNote.value,
                     contenido = contentNote.value,
-                    usuarioId = userPF.userId,
+                    usuarioId = userId,
                     fechaCreacion = "",
                     fechaActualizacion = ""
                 )

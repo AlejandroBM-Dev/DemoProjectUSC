@@ -4,7 +4,6 @@ import androidx.compose.ui.graphics.toArgb
 import com.raiserdev.demoproject.Labels
 import com.raiserdev.demoproject.data.db.model.Label
 import com.raiserdev.demoproject.data.db.model.LabelsData
-import com.raiserdev.demoproject.data.db.model.toDbEntity
 import com.raiserdev.demoproject.domain.LabelRepository
 import com.raiserdev.demoproject.notas.NotasProjectDatabase
 import kotlinx.coroutines.Dispatchers
@@ -12,7 +11,7 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 
 class LabelRepoImpl(
-    private val database: NotasProjectDatabase
+    database: NotasProjectDatabase
 ): LabelRepository {
     private val labelQueries = database.labelsQueries
     override suspend fun insert(label: Label): Long = withContext(Dispatchers.IO ) {

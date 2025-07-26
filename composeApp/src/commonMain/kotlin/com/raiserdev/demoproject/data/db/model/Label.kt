@@ -1,7 +1,7 @@
 package com.raiserdev.demoproject.data.db.model
 
-import androidx.compose.material3.Label
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 
 data class Label(
     val id: Int,
@@ -25,7 +25,7 @@ fun LabelsData.toDbEntity() = Label(
     usuarioId = usuarioId,
     label = label,
     count = count,
-    colorHex = color.value.toLong()
+    colorHex = color.toArgb().toLong()
 )
 
 data class LabelsData(
