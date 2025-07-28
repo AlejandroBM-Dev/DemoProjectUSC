@@ -24,9 +24,9 @@ WHERE id = :id;
 
 insertNota:
 INSERT INTO notas (
-    titulo, contenido, usuario_id, fecha_creacion, fecha_actualizacion
+    titulo, contenido, usuario_id, label_id, fecha_creacion, fecha_actualizacion
 ) VALUES (
-    :titulo, :contenido, :usuario_id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+    :titulo, :contenido, :usuario_id,:label_id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 );
 
 updateNota:
@@ -34,6 +34,7 @@ UPDATE notas
 SET
     titulo = :titulo,
     contenido = :contenido,
+    label_id = :label_id,
     fecha_actualizacion = CURRENT_TIMESTAMP
 WHERE id = :id;
 

@@ -1,5 +1,6 @@
 package com.raiserdev.demoproject.ui.presentation.home
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raiserdev.demoproject.data.db.model.LabelsData
@@ -21,30 +22,54 @@ class NotasViewModel(
     private val labelRepository: LabelRepository,
     private val userPreferencesRepository: UserPreferencesRepository
 ): ViewModel() {
-    init {
-        viewModelScope.launch {
-            userId = userPreferencesRepository.userPrefData.first().userId
-        }
+    /*init {
         getLabels()
-    }
+    }*/
     var mNoteId: Long = NEW_NOTE_ID
     private var userId: Long = 0
+    private val _labels = MutableStateFlow(mutableListOf<LabelsData>())
+    val labels: StateFlow<MutableList<LabelsData>> get() = _labels.asStateFlow()
+    private val _idLabel = MutableStateFlow(0)
+    val idLabel: StateFlow<Int> get() = _idLabel.asStateFlow()
+
+    private val _colorLabel = MutableStateFlow(Color.LightGray)
+    val colorLabel: StateFlow<Color> get() = _colorLabel.asStateFlow()
 
     private val _titleNote = MutableStateFlow("")
     val titleNote: StateFlow<String> get() = _titleNote
-
-    private val _labels = MutableStateFlow(mutableListOf<LabelsData>())
-    val labels: StateFlow<MutableList<LabelsData>> get() = _labels.asStateFlow()
-
     private val _contentNote = MutableStateFlow("")
     val contentNote: StateFlow<String> get() = _contentNote.asStateFlow()
 
-    fun onTitleNoteChange(newTitle: String) {
+    fun loadData(noteId: Long) {
+        println("loadData _noteId: $noteId")
+        viewModelScope.launch {
+            userId = userPreferencesRepository.userPrefData.first().userId
+        }.invokeOnCompletion {
+            getLabels {
+                if (noteId != NEW_NOTE_ID) {
+                    getNoteData(noteId)
+                } else {
+                    //Solo asignamos la lebel general...
+                    setIdLabelChange( validateAssignLabel(NEW_NOTE_ID.toInt()) )
+                    //_colorLabel.value =
+                }
+            }
+        }
+    }
+
+    fun setTitleNoteChange(newTitle: String) {
         _titleNote.value = newTitle
     }
 
-    fun onContentNoteChange(newContent: String) {
+    fun setContentNoteChange(newContent: String) {
         _contentNote.value = newContent
+    }
+
+    fun setIdLabelChange(newIdLabel: Int) {
+        newIdLabel.let {
+            _idLabel.value = it
+            getColorLabel(it.toLong())
+        }
     }
 
     fun getNoteData(noteId: Long) {
@@ -52,19 +77,43 @@ class NotasViewModel(
             mNoteId = noteId
             val note = noteRepository.getNotaById(noteId)
             note?.let {
-                _titleNote.value = it.titulo
-                _contentNote.value = it.contenido ?: ""
+                setTitleNoteChange(it.titulo)
+                setContentNoteChange(it.contenido ?: "")
+                setIdLabelChange(it.labelId)
             }
+            //val label = labelRepository.getLabelById(note.labelId)
         }
     }
 
-    private fun getLabels() {
+    private fun validateAssignLabel(idLabel: Int): Int {
+        val existLabel = _labels.value.find { it.idLabel == idLabel }
+        val foundIdLabel = if (_labels.value.size <= 1 && idLabel == 0) {
+            _labels.value.first().idLabel
+        } else if (existLabel != null){
+            idLabel
+        } else {
+            _labels.value.find { it.label == "Mostrar todo" }?.idLabel
+        }
+        getColorLabel(foundIdLabel?.toLong() ?: throw IllegalArgumentException("Error al no encontrar ID de la etiqueta."))
+
+        return foundIdLabel ?: throw IllegalArgumentException("Error al no encontrar ID de la etiqueta.")
+    }
+    fun getLabels(onSucces: (Boolean) -> Unit) {
         viewModelScope.launch {
-            val labels = labelRepository.getAllById(userId)
+            val userPref = userPreferencesRepository.userPrefData.first()
+            val labels = labelRepository.getAllById(userPref.userId)
             _labels.value = labels.toMutableList()
-
+            onSucces.invoke(true)
         }
     }
+
+    private fun getColorLabel(idLabel: Long) {
+        viewModelScope.launch {
+            val labelData = labelRepository.getById(idLabel)
+            _colorLabel.value = labelData?.color ?: Color.LightGray
+        }
+    }
+
     fun saveNote(onSucces: (Boolean) -> Unit) {
         if (titleNote.value.isNotEmpty() && contentNote.value.isNotEmpty()) {
             viewModelScope.launch {
@@ -74,6 +123,7 @@ class NotasViewModel(
                     titulo = titleNote.value,
                     contenido = contentNote.value,
                     usuarioId = userId,
+                    labelId = idLabel.value,
                     fechaCreacion = "",
                     fechaActualizacion = ""
                 )

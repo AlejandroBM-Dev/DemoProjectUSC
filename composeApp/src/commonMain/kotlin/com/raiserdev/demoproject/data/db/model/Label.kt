@@ -29,9 +29,9 @@ fun LabelsData.toDbEntity() = Label(
 )
 
 data class LabelsData(
-    val idLabel: Int,
+    val idLabel: Int = 0,
     val usuarioId: Long,
     val label: String,
-    val count: Int,
+    val count: Int = 0,
     val color: Color
 )

@@ -26,7 +26,8 @@ class NotaRepoImpl(
         queries.insertNota(
             titulo = nota.titulo,
             contenido = nota.contenido,
-            usuario_id = nota.usuarioId
+            usuario_id = nota.usuarioId,
+            label_id = nota.labelId.toLong(),
         )
         queries.getNotas().executeAsList().last().id // obtén el último insertado
     }
@@ -36,7 +37,8 @@ class NotaRepoImpl(
             queries.updateNota(
                 id = nota.id,
                 titulo = nota.titulo,
-                contenido = nota.contenido
+                contenido = nota.contenido,
+                label_id = nota.labelId.toLong(),
             )
             true
         } catch (e: Exception) {
@@ -59,6 +61,7 @@ class NotaRepoImpl(
         titulo = titulo,
         contenido = contenido,
         usuarioId = usuario_id,
+        labelId = label_id?.toInt() ?: 0,
         fechaCreacion = fecha_creacion.toString(),
         fechaActualizacion = fecha_actualizacion.toString()
     )

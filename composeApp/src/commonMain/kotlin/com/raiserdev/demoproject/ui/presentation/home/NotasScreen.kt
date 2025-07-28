@@ -30,14 +30,19 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.raiserdev.demoproject.ui.common.bar.NotesTopAppBar
-import com.raiserdev.demoproject.utils.NEW_NOTE_ID
+import com.raiserdev.demoproject.ui.common.dialog.LabelsDialog
 import com.raiserdev.demoproject.utils.showToast
 
 @Composable
@@ -47,8 +52,8 @@ fun NotasScreen(
     onBackClick: () -> Unit,
     onSettingsClick: () -> Unit
 ) {
-    if (noteId != NEW_NOTE_ID) {
-        notasVM.getNoteData(noteId)
+    LaunchedEffect(noteId) {
+        notasVM.loadData(noteId)
     }
 
     val titleNote = notasVM.titleNote.collectAsState()
@@ -67,10 +72,11 @@ fun NotasScreen(
                 onEditUser = {}
             )
         },
-        bottomBar = { NotasBottomAppBar(
-            notasVM = notasVM,
-            onBackClick
-        ) },
+        bottomBar = {
+            NotasBottomAppBar(
+                notasVM = notasVM,
+                onBack = onBackClick
+            ) },
     ) { paddingValues ->
         val modifier = Modifier.padding(paddingValues)
         Column(
@@ -78,25 +84,29 @@ fun NotasScreen(
         ) {
             NotasHead(
                 notaVM = notasVM,
-                onSelectLabel = {
-
+                onSelectLabel = { idLabel ->
+                    println("Head notes.  idLabel: $idLabel")
+                    notasVM.setIdLabelChange(idLabel)
                 }
             )
             NotasBody(
                 notaVM = notasVM
             )
         }
-
     }
 }
 
 @Composable
 fun NotasHead(
     notaVM: NotasViewModel,
-    onSelectLabel: () -> Unit
+    onSelectLabel: (Int) -> Unit
 ) {
     val modifier = Modifier.wrapContentHeight().fillMaxWidth().padding(start = 10.dp, end = 10.dp, top = 5.dp, bottom = 5.dp)
     val titleNote = notaVM.titleNote.collectAsState()
+    val showAllLabels = notaVM.labels.collectAsState()
+    val labelSelectedColor = notaVM.colorLabel.collectAsState()
+
+    var showDialog by remember { mutableStateOf(false) }
 
     Row(
         modifier = modifier,
@@ -105,19 +115,31 @@ fun NotasHead(
     ) {
         OutlinedTextField(
             value = titleNote.value,
-            onValueChange = { notaVM.onTitleNoteChange(it) },
+            onValueChange = { notaVM.setTitleNoteChange(it) },
             label = { Text("Agrega un titulo.") },
             modifier = Modifier.fillMaxWidth().weight(0.8f)
         )
         Spacer(modifier = Modifier.width(15.dp))
         IconButton(
             onClick = {
-                onSelectLabel.invoke()
+                showDialog = !showDialog
+                // onSelectLabel.invoke()
             },
-            modifier = Modifier.weight(0.2f).clip(CircleShape).background(Color.Blue)
+            modifier = Modifier.clip(CircleShape).background(labelSelectedColor.value)
         ) {
             Icon(Icons.Filled.NewLabel, contentDescription = "Select label",tint = Color.White)
         }
+    }
+    if (showDialog) {
+        LabelsDialog(
+            showAllLabels.value,
+            notaVM.idLabel.value,
+            onDismiss = { showDialog = false },
+            onConfirm = { labelId ->
+                onSelectLabel.invoke(labelId)
+                showDialog = false
+            }
+        )
     }
 }
 
@@ -130,7 +152,7 @@ fun NotasBody(
     val contentNote = notaVM.contentNote.collectAsState()
     TextField(
         value = contentNote.value,
-        onValueChange = { notaVM.onContentNoteChange(it) },
+        onValueChange = { notaVM.setContentNoteChange(it) },
         label = { Text("Título de la nota") },
         modifier = modifier.scrollable(state = scroll, orientation = Orientation.Vertical).fillMaxHeight()
     )

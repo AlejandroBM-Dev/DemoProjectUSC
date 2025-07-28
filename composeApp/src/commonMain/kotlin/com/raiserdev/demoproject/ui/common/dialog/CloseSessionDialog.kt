@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import com.raiserdev.demoproject.data.db.model.LabelsData
 import demoprojectusc.composeapp.generated.resources.Res
 import demoprojectusc.composeapp.generated.resources.accept
 import demoprojectusc.composeapp.generated.resources.cancel
@@ -51,10 +52,10 @@ fun CloseSessionDialog(
             Column(
                 modifier = modifier
                     .wrapContentSize()
-                    .padding(start =15.dp,top =15.dp, end = 15.dp, bottom = 15.dp)
+                    .padding(15.dp)
             ) {
                 Text(
-                    "¿Quieres cerrar sesión?",
+                    text = "¿Quieres cerrar sesión?",
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold
                 )

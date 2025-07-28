@@ -42,18 +42,34 @@ class HomeViewModel(
 
                 if(countListLabel == EMPTY_LIST_LABEL) {
                     println("insert label")
-                    val insert =
-                    labelRepository.insert(
-                        LabelsData(
-                            idLabel = 0,
-                            usuarioId = it,
-                            label = "Mostrar todo",
-                            count = 0,
-                            color = Color.Blue
-                        ).toDbEntity()
-                    )
+                    val insertMostarTodo =
+                        labelRepository.insert(
+                            LabelsData(
+                                usuarioId = it,
+                                label = "Mostrar todo",
+                                color = Color.Blue
+                            ).toDbEntity()
+                        )
 
-                    println("insert: $insert")
+                    val insertHome =
+                        labelRepository.insert(
+                            LabelsData(
+                                usuarioId = it,
+                                label = "Casa",
+                                color = Color.Green
+                            ).toDbEntity()
+                        )
+
+                    val insertTrabajo =
+                        labelRepository.insert(
+                            LabelsData(
+                                usuarioId = it,
+                                label = "Trabajo",
+                                color = Color.Magenta
+                            ).toDbEntity()
+                        )
+
+                    println("insert: \n Mostrar Todo: $insertMostarTodo \n Home: $insertHome \n Trabajo: $insertTrabajo")
                 }
                 getLabels()
             }
@@ -84,7 +100,6 @@ class HomeViewModel(
         viewModelScope.launch {
             val userPF = userPreferencesRepository.userPrefData.first()
             val notes = noteRepository.getNotasByUsuario(userPF.userId)
-            println("nota: $notes")
 
             _listNotes.value = notes.toMutableList()
         }

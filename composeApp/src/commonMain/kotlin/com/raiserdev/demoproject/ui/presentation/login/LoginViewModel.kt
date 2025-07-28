@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.raiserdev.demoproject.data.ds.PrefsDataStore
 import com.raiserdev.demoproject.data.ds.UserPreferencesRepository
 import com.raiserdev.demoproject.domain.UserRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -78,6 +79,8 @@ class LoginViewModel(
                 )
                 if (userLogin != null) {
                     userPreferencesRepository.apply {
+                        clearData()
+                        delay(100) //For best clean.. :p
                         updateUserId(userLogin.id)
                         updateUserName(userLogin.userName ?: "")
                         updateEmail(userLogin.email ?: "")
