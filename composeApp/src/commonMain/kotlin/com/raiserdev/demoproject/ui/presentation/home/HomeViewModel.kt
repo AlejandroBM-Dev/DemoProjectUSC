@@ -112,7 +112,6 @@ class HomeViewModel(
         var changeGridOrList = false
         viewModelScope.launch {
             changeGridOrList = userPreferencesRepository.sessionPrefData.first().changeGridOrList
-            println("last: $changeGridOrList")
             _updateGridOrList.value = changeGridOrList
         }
     }

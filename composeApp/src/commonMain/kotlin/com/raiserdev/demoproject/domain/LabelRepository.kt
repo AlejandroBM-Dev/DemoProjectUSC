@@ -10,4 +10,7 @@ interface LabelRepository {
     suspend fun getById(id: Long): LabelsData?
     suspend fun update(label: LabelsData): Boolean
     suspend fun delete(id: Long): Boolean
+    //cambios para el count de label´s
+    suspend fun incrementLabelCount(id: Long)
+    suspend fun decrementLabelCount(id: Long)
 }

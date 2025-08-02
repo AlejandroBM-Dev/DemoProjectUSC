@@ -57,6 +57,19 @@ class LabelRepoImpl(
         }
     }
 
+    override suspend fun incrementLabelCount(id: Long) {
+        val label = getById(id)
+        update(label?.copy(count = label.count + 1) ?: throw Exception("Label increment not found"))    }
+
+    override suspend fun decrementLabelCount(id: Long) {
+        val label = getById(id)
+        label?.count.let { count ->
+            if (count != null && count > 0) {
+                update(label?.copy(count = label.count - 1) ?: throw Exception("Label decrement not found"))
+            }
+        }
+    }
+
     private fun Labels.toDomain(): LabelsData = Label(
         id = id.toInt(),
         usuarioId = usuario_id,
