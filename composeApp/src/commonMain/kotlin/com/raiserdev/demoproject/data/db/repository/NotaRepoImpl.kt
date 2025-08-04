@@ -22,6 +22,13 @@ class NotaRepoImpl(
         queries.getNotaById(id).executeAsOneOrNull()?.toDomain()
     }
 
+    override suspend fun getNotasByLabelId(userId: Long, labelId: Long): List<Nota> = withContext(Dispatchers.IO) {
+        queries.getNotasByLabelId(
+            usuarioId = userId,
+            labelId = labelId
+        ).executeAsList().map { it.toDomain() }
+    }
+
     override suspend fun insertNota(nota: Nota): Long = withContext(Dispatchers.IO) {
         queries.insertNota(
             titulo = nota.titulo,

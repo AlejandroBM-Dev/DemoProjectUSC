@@ -1,6 +1,7 @@
 package com.raiserdev.demoproject.ui.presentation.login
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,29 +11,33 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.Checkbox
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ContactSupport
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -90,11 +95,19 @@ fun LoginScreen (
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun HeadView() {
-    AsyncImage(
-        modifier = Modifier.wrapContentSize().padding(5.dp),
-        model = Res.getUri("files/undraw_login.svg"),
-        contentDescription = "LoginImage"
-    )
+    Box(
+        modifier = Modifier
+            .wrapContentHeight()
+            .fillMaxWidth(),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        AsyncImage(
+            modifier = Modifier.fillMaxWidth(0.7f).clip(RoundedCornerShape(10.dp)),
+            model = Res.getUri("files/login_update.png"),
+            contentDescription = "LoginImage"
+        )
+    }
+
 }
 
 @Composable
@@ -113,11 +126,11 @@ fun BodyView(
     ) {
         Text(
             text = stringResource(Res.string.login_title),
-            style = MaterialTheme.typography.h3, // Tamaño de texto según Material Design
-            modifier = Modifier.padding(bottom = 16.dp) // Espaciado debajo del título
+            style = MaterialTheme.typography.headlineMedium, // Tamaño de texto según Material Design
+            modifier = Modifier.padding(top = 10.dp, bottom = 10.dp) // Espaciado debajo del título
         )
         Spacer(modifier = Modifier.height(8.dp))
-        TextField(
+        OutlinedTextField(
             value = credentials.first,
             leadingIcon = {
                 Icon(
@@ -139,7 +152,7 @@ fun BodyView(
             modifier = Modifier.fillMaxWidth(0.8f) // Campo de texto ocupa el 80% del ancho
         )
         Spacer(modifier = Modifier.height(8.dp))
-        TextField(
+        OutlinedTextField(
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Lock,
@@ -169,14 +182,6 @@ fun BodyView(
                 }
             }
         )
-        /*
-        * OutlinedTextField(
-                value = viewModel.password,
-                visualTransformation = if(!showPassword) PasswordVisualTransformation() else VisualTransformation.None,
-                onValueChange = { viewModel.password = it },
-                trailingIcon = { IconButton(onClick = { showPassword = !showPassword }) {
-                    Icon(imageVector = if(showPassword) Icons.Filled.VisibilityOff else Icons.Filled.Visibility, contentDescription = "Show Password")
-                }})*/
         Spacer(modifier = Modifier.height(8.dp))
         Row (
             modifier = Modifier.fillMaxWidth(0.8f),
@@ -189,7 +194,7 @@ fun BodyView(
                 onCheckedChange = { loginVM.onRememberCredentials(it) }
             )
         }
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(15.dp))
         Button(
             onClick = {
                 loginVM.onLogin(
@@ -207,10 +212,12 @@ fun BodyView(
                 text = "Login",
             )
         }
-        Spacer(modifier = Modifier.height(8.dp)) // Espaciado entre botones
+        Spacer(modifier = Modifier.height(4.dp)) // Espaciado entre botones
         Text("or")
+        Spacer(modifier = Modifier.height(4.dp))
         Button(
             onClick = onRegisterClick,
+            colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray),
             modifier = Modifier.fillMaxWidth(0.8f) // Botón ocupa el 80% del ancho
         ) {
             Text("Register")

@@ -8,7 +8,6 @@ import com.raiserdev.demoproject.data.db.model.Nota
 import com.raiserdev.demoproject.data.ds.UserPreferencesRepository
 import com.raiserdev.demoproject.domain.LabelRepository
 import com.raiserdev.demoproject.domain.NotasRepository
-import com.raiserdev.demoproject.domain.usecase.UpdateNoteUseCase
 import com.raiserdev.demoproject.utils.NEW_NOTE_ID
 import com.raiserdev.demoproject.utils.showToast
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -93,7 +92,7 @@ class NotasViewModel(
         } else if (existLabel != null){
             idLabel
         } else {
-            _labels.value.find { it.label == "Mostrar todo" }?.idLabel
+            _labels.value.find { it.label == "Personal" }?.idLabel
         }
         getColorLabel(foundIdLabel?.toLong() ?: throw IllegalArgumentException("Error al no encontrar ID de la etiqueta."))
 
@@ -180,10 +179,6 @@ class NotasViewModel(
             //Usa un BOOLEAN para saber si se pudo actualizar la nota
             val isSuccess = if (updateNote) {
                 cleanData("Nota actualizada con éxito.")
-                UpdateNoteUseCase(
-                    noteRepository,
-                    labelRepository
-                )
                 true
             } else {
                 showToast("No se pudo actualizar la nota.")

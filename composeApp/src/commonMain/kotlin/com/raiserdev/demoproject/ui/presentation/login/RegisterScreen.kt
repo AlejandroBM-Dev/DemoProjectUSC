@@ -274,7 +274,6 @@ fun BodyView(
                             maxLines = 1
                         )
                     }
-
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))

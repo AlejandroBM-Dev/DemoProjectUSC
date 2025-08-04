@@ -14,8 +14,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun App(
     crossConfigDevice: CrossConfigDevice ?= null,
     isTopBarVisible: Boolean) {
-
-
     MaterialTheme {
         SessionCache.configDevice = crossConfigDevice
         val navController = rememberNavController()

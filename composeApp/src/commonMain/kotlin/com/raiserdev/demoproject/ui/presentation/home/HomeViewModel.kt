@@ -13,6 +13,7 @@ import com.raiserdev.demoproject.utils.EMPTY_LIST_LABEL
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -27,56 +28,50 @@ class HomeViewModel(
 
     private val _updateGridOrList = MutableStateFlow(false)
     val updateGridOrList: StateFlow<Boolean> get() = _updateGridOrList.asStateFlow()
-    private val _listNotes = MutableStateFlow(mutableListOf<Nota>())
-    val listNotes: StateFlow<MutableList<Nota>> get() = _listNotes.asStateFlow()
-
+    private val _listNotes = MutableStateFlow<List<Nota>>(emptyList())
+    val listNotes: StateFlow<List<Nota>> get() = _listNotes
+    private val _showDeleteDialog = MutableStateFlow(Pair(false, 0))
+    val showDeleteDialog: StateFlow<Pair<Boolean, Int>> get() = _showDeleteDialog.asStateFlow()
     private val _showCloseSessionDialog = MutableStateFlow(false)
     val showCloseSessionDialog: StateFlow<Boolean> get() = _showCloseSessionDialog.asStateFlow()
 
+    private val _pendingNoteToDeleteId = MutableStateFlow<Int?>(null)
+    val pendingNoteToDeleteId: StateFlow<Int?> = _pendingNoteToDeleteId
+
     init {
+        println("Nota.. homeViewModel")
         viewModelScope.launch {
             userPreferencesRepository.userPrefData.first().userId.let {
-                println("userId: $it")
                 val countListLabel = labelRepository.getAllById(it).size
-                println("countListLabel: $countListLabel")
-
-                if(countListLabel == EMPTY_LIST_LABEL) {
-                    println("insert label")
-                    val insertMostarTodo =
-                        labelRepository.insert(
+                if (countListLabel == EMPTY_LIST_LABEL) {
+                     labelRepository.insert(
                             LabelsData(
                                 usuarioId = it,
-                                label = "Mostrar todo",
+                                label = "Personal",
                                 color = Color.Blue
                             ).toDbEntity()
                         )
-
-                    val insertHome =
-                        labelRepository.insert(
+                     labelRepository.insert(
                             LabelsData(
                                 usuarioId = it,
                                 label = "Casa",
                                 color = Color.Green
                             ).toDbEntity()
                         )
-
-                    val insertTrabajo =
-                        labelRepository.insert(
+                     labelRepository.insert(
                             LabelsData(
                                 usuarioId = it,
                                 label = "Trabajo",
                                 color = Color.Magenta
                             ).toDbEntity()
                         )
-
-                    println("insert: \n Mostrar Todo: $insertMostarTodo \n Home: $insertHome \n Trabajo: $insertTrabajo")
                 }
                 getLabels()
             }
         }
     }
 
-    private fun getLabels() {
+    fun getLabels() {
         viewModelScope.launch {
             userPreferencesRepository
                 .userPrefData
@@ -100,9 +95,18 @@ class HomeViewModel(
         viewModelScope.launch {
             val userPF = userPreferencesRepository.userPrefData.first()
             val notes = noteRepository.getNotasByUsuario(userPF.userId)
-
             _listNotes.value = notes.toMutableList()
         }
+    }
+
+    fun onDeleteNote(idNote: Int) {
+        viewModelScope.launch {
+            noteRepository.deleteNota(idNote.toLong())
+        }
+    }
+
+    fun showDeleteDialog( show: Boolean, idNote: Int = 0 ) {
+        _showDeleteDialog.value = Pair(show, idNote)
     }
 
     fun showCloseDialog( show: Boolean ) {
@@ -120,5 +124,25 @@ class HomeViewModel(
             userPreferencesRepository.updateChangeGridOrList(update)
         }
         _updateGridOrList.value = update
+    }
+
+    fun getFilterByLabelId(labelId: Long) {
+        viewModelScope.launch {
+            val userId = userPreferencesRepository.userPrefData.first().userId
+            val notes = noteRepository
+                .getNotasByLabelId(
+                    userId = userId,
+                    labelId = labelId
+                )
+            _listNotes.value = notes.toMutableList()
+        }
+    }
+
+    fun triggerAnimatedDelete(noteId: Int) {
+        _pendingNoteToDeleteId.value = noteId
+    }
+
+    fun clearPendingDelete() {
+        _pendingNoteToDeleteId.value = null
     }
 }
